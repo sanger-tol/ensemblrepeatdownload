@@ -26,7 +26,11 @@ process ENSEMBL_GENOME_DOWNLOAD {
     def ftp_path = params.ftp_root + "/" + ensembl_species_name + "/" + assembly_accession + "/genome"
     def remote_filename_stem = ensembl_species_name + "-" + assembly_accession
 
-    meta = [ id : assembly_accession + ".masked.ensembl", outdir: analysis_dir, accession : assembly_accession ]
+    meta = [
+        id : assembly_accession + ".masked.ensembl",
+        outdir: analysis_dir,
+        accession : assembly_accession
+    ]
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """

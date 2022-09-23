@@ -1,9 +1,5 @@
-species_dir,assembly_name,ensembl_species_name,geneset_version
-25g/data/echinoderms/Asterias_rubens,eAstRub1.3,Asterias_rubens,
-25g/data/echinoderms/Asterias_rubens,eAstRub1.3,Asterias_rubens,2020_11
-25g/data/echinoderms/Asterias_rubens,eAstRub1.3,Asterias_rubens,2022_03
-25g/data/insects/Osmia_bicornis,iOsmBic2.1,Osmia_bicornis_bicornis,
-25g/data/insects/Osmia_bicornis,iOsmBic2.1,Osmia_bicornis_bicornis,2021_11
-25g/data/insects/Osmia_bicornis,iOsmBic2.1_alternate_haplotype,Osmia_bicornis_bicornis,
-25g/data/insects/Osmia_bicornis,iOsmBic2.1_alternate_haplotype,Osmia_bicornis_bicornis,2022_02
-darwin/data/insects/Noctua_fimbriata,ilNocFimb1.1,Noctua_fimbriata,2022_03
+species_dir,assembly_name,ensembl_species_name
+25g/data/echinoderms/Asterias_rubens,eAstRub1.3,Asterias_rubens
+25g/data/insects/Osmia_bicornis,iOsmBic2.1,Osmia_bicornis_bicornis
+25g/data/insects/Osmia_bicornis,iOsmBic2.1_alternate_haplotype,Osmia_bicornis_bicornis
+darwin/data/insects/Noctua_fimbriata,ilNocFimb1.1,Noctua_fimbriata

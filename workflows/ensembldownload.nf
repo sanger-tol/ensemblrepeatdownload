@@ -20,11 +20,9 @@ include { SAMPLESHEET_CHECK             } from '../modules/local/samplesheet_che
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { DOWNLOAD                                     } from '../subworkflows/local/download'
-include { PREPARE_FASTA as PREPARE_GENES_FASTA         } from '../subworkflows/sanger-tol/prepare_fasta'
-include { PREPARE_FASTA as PREPARE_REPEAT_MASKED_FASTA } from '../subworkflows/sanger-tol/prepare_fasta'
-include { PREPARE_GFF                                  } from '../subworkflows/local/prepare_gff'
-include { PREPARE_REPEATS                              } from '../subworkflows/sanger-tol/prepare_repeats'
+include { DOWNLOAD        } from '../subworkflows/local/download'
+include { PREPARE_FASTA   } from '../subworkflows/sanger-tol/prepare_fasta'
+include { PREPARE_REPEATS } from '../subworkflows/sanger-tol/prepare_repeats'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,7 +50,7 @@ workflow ENSEMBLDOWNLOAD {
 
         SAMPLESHEET_CHECK ( file(params.input, checkIfExists: true) )
             .csv
-            // Provides species_dir, assembly_name, ensembl_species_name, and geneset_version
+            // Provides species_dir, assembly_name, and ensembl_species_name
             .splitCsv ( header:true, sep:',' )
             // Add analysis_dir, and load the accession number, following the Tree of Life directory structure
             .map {
@@ -62,17 +60,6 @@ workflow ENSEMBLDOWNLOAD {
                     ]
             }
             .set { ch_inputs }
-
-    } else if (params.geneset_version) {
-
-        ch_inputs = Channel.from( [
-            [
-                analysis_dir: params.outdir,
-                assembly_accession: params.assembly_accession,
-                ensembl_species_name: params.ensembl_species_name,
-                geneset_version: params.geneset_version,
-            ]
-        ] )
 
     } else {
 
@@ -92,23 +79,11 @@ workflow ENSEMBLDOWNLOAD {
     )
     ch_versions         = ch_versions.mix(DOWNLOAD.out.versions)
 
-    // Preparation of Fasta files
-    PREPARE_GENES_FASTA (
-        DOWNLOAD.out.genes
-    )
-    ch_versions         = ch_versions.mix(PREPARE_GENES_FASTA.out.versions)
-
-    // Preparation of GFF files
-    PREPARE_GFF (
-        DOWNLOAD.out.gff
-    )
-    ch_versions         = ch_versions.mix(PREPARE_GFF.out.versions)
-
     // Preparation of repeat-masking files
-    PREPARE_REPEAT_MASKED_FASTA (
+    PREPARE_FASTA (
         DOWNLOAD.out.genome
     )
-    ch_versions         = ch_versions.mix(PREPARE_REPEAT_MASKED_FASTA.out.versions)
+    ch_versions         = ch_versions.mix(PREPARE_FASTA.out.versions)
     PREPARE_REPEATS (
         DOWNLOAD.out.genome
     )
