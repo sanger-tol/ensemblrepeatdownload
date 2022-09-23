@@ -1,4 +1,4 @@
-# sanger-tol/ensembldownload: Citations
+# sanger-tol/ensemblrepeatdownload: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 

@@ -1,6 +1,6 @@
-[![GitHub Actions CI Status](https://github.com/sanger-tol/ensembldownload/workflows/nf-core%20CI/badge.svg)](https://github.com/sanger-tol/ensembldownload/actions?query=workflow%3A%22nf-core+CI%22)
+[![GitHub Actions CI Status](https://github.com/sanger-tol/ensemblrepeatdownload/workflows/nf-core%20CI/badge.svg)](https://github.com/sanger-tol/ensemblrepeatdownload/actions?query=workflow%3A%22nf-core+CI%22)
 
-<!-- [![GitHub Actions Linting Status](https://github.com/sanger-tol/ensembldownload/workflows/nf-core%20linting/badge.svg)](https://github.com/sanger-tol/ensembldownload/actions?query=workflow%3A%22nf-core+linting%22) -->
+<!-- [![GitHub Actions Linting Status](https://github.com/sanger-tol/ensemblrepeatdownload/workflows/nf-core%20linting/badge.svg)](https://github.com/sanger-tol/ensemblrepeatdownload/actions?query=workflow%3A%22nf-core+linting%22) -->
 
 [![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
@@ -15,7 +15,7 @@
 
 ## Introduction
 
-**sanger-tol/ensembldownload** is a pipeline that downloads gene and repeat annotations from Ensembl into a Tree of Life directory structure.
+**sanger-tol/ensemblrepeatdownload** is a pipeline that downloads gene and repeat annotations from Ensembl into a Tree of Life directory structure.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
@@ -55,7 +55,7 @@ _Masked assembly download_:
 3. Download the pipeline and test it on a minimal dataset with a single command:
 
    ```bash
-   nextflow run sanger-tol/ensembldownload -profile test,YOURPROFILE --outdir <OUTDIR>
+   nextflow run sanger-tol/ensemblrepeatdownload -profile test,YOURPROFILE --outdir <OUTDIR>
    ```
 
    Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
@@ -68,26 +68,26 @@ _Masked assembly download_:
 4. Start running your own analysis!
 
    ```console
-   nextflow run sanger-tol/ensembldownload --input $PWD/assets/samplesheet.csv --outdir <OUTDIR> -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+   nextflow run sanger-tol/ensemblrepeatdownload --input $PWD/assets/samplesheet.csv --outdir <OUTDIR> -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
    ```
 
 ## Documentation
 
-The sanger-tol/ensembldownload pipeline comes with documentation about the pipeline [usage](docs/usage.md) and [output](docs/output.md).
+The sanger-tol/ensemblrepeatdownload pipeline comes with documentation about the pipeline [usage](docs/usage.md) and [output](docs/output.md).
 
 ## Credits
 
-sanger-tol/ensembldownload was originally written by @muffato.
+sanger-tol/ensemblrepeatdownload was originally written by @muffato.
 
 ## Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
-For further information or help, don't hesitate to get in touch on the [Slack `#pipelines` channel](https://sangertreeoflife.slack.com/channels/pipelines). Please [create an issue](https://github.com/sanger-tol/ensembldownload/issues/new/choose) on GitHub if you are not on the Sanger slack channel.
+For further information or help, don't hesitate to get in touch on the [Slack `#pipelines` channel](https://sangertreeoflife.slack.com/channels/pipelines). Please [create an issue](https://github.com/sanger-tol/ensemblrepeatdownload/issues/new/choose) on GitHub if you are not on the Sanger slack channel.
 
 ## Citations
 
-If you use sanger-tol/ensembldownload for your analysis, please cite it using the following doi: [10.5281/zenodo.6983933](https://doi.org/10.5281/zenodo.xxxxxxxx6983933)
+If you use sanger-tol/ensemblrepeatdownload for your analysis, please cite it using the following doi: [10.5281/zenodo.6983933](https://doi.org/10.5281/zenodo.xxxxxxxx6983933)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 

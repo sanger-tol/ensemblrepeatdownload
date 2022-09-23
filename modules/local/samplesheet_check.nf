@@ -18,7 +18,7 @@ process SAMPLESHEET_CHECK {
     when:
     task.ext.when == null || task.ext.when
 
-    script: // This script is bundled with the pipeline, in sanger-tol/ensembldownload/bin/
+    script: // This script is bundled with the pipeline, in sanger-tol/ensemblrepeatdownload/bin/
     """
     check_samplesheet.py \\
         $samplesheet \\
