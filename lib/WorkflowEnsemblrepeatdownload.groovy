@@ -17,7 +17,6 @@ class WorkflowEnsemblrepeatdownload {
                 System.exit(1)
             }
         } else {
-            // Don't check params.geneset_version since it's optional
             if (!params.assembly_accession || !params.ensembl_species_name || !params.outdir) {
                 log.error "Either --input, or --assembly_accession, --assembly_name, and --outdir must be provided"
                 System.exit(1)

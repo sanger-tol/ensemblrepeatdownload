@@ -23,12 +23,6 @@
                     "description": "Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's",
                     "fa_icon": "fas fa-italic"
                 },
-                "geneset_version": {
-                    "type": "string",
-                    "description": "Version of the geneset, usually in the form `YYYY-MM`. When missing, the dataset considered is actually the repeat annotation.",
-                    "pattern": "^20[0-9]{2}_[01][0-9]$",
-                    "fa_icon": "fas fa-italic"
-                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",

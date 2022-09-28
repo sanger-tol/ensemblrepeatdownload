@@ -31,7 +31,6 @@ class RowChecker:
         dir_col="species_dir",
         name_col="assembly_name",
         ensembl_name_col="ensembl_species_name",
-        geneset_col="geneset_version",
         **kwargs,
     ):
         """
@@ -44,18 +43,14 @@ class RowChecker:
                 (default "assembly_name").
             ensembl_name_col(str): The name of the column that contains the Ensembl species name
                 (default "ensembl_species_name").
-            geneset_col (str): The name of the column that contains the geneset version
-                (default "geneset_version").
 
         """
         super().__init__(**kwargs)
         self._dir_col = dir_col
         self._name_col = name_col
         self._ensembl_name_col = ensembl_name_col
-        self._geneset_col = geneset_col
         self._seen = set()
         self.modified = []
-        self._regex_geneset = re.compile(r"^20[0-9]{2}_[01][0-9]$")
 
     def validate_and_transform(self, row):
         """
@@ -69,8 +64,7 @@ class RowChecker:
         self._validate_dir(row)
         self._validate_name(row)
         self._validate_ensembl_name(row)
-        self._validate_geneset(row)
-        self._seen.add((row[self._name_col], row[self._geneset_col]))
+        self._seen.add(row[self._name_col])
         self.modified.append(row)
 
     def _validate_dir(self, row):
@@ -91,14 +85,6 @@ class RowChecker:
             raise AssertionError("Ensembl name is required.")
         if " " in row[self._ensembl_name_col]:
             raise AssertionError("Ensembl names must not contain whitespace.")
-
-    def _validate_geneset(self, row):
-        """Assert that the geneset version is either empty or matches the expected nomenclature."""
-        if len(row[self._geneset_col]) > 0:
-            if not self._regex_geneset.match(row[self._geneset_col]):
-                raise AssertionError(
-                    "Geneset versions must match %s." % self._regex_geneset
-                )
 
     def validate_unique_objects(self):
         """
@@ -159,16 +145,14 @@ def check_samplesheet(file_in, file_out):
     Example:
         This function checks that the samplesheet follows the following structure::
 
-            species_dir,assembly_name,ensembl_species_name,geneset_version
-            25g/data/echinoderms/Asterias_rubens,eAstRub1.3,Asterias_rubens,
-            25g/data/echinoderms/Asterias_rubens,eAstRub1.3,Asterias_rubens,2020_11
+            species_dir,assembly_name,ensembl_species_name
+            25g/data/echinoderms/Asterias_rubens,eAstRub1.3,Asterias_rubens
 
     """
     required_columns = {
         "species_dir",
         "assembly_name",
         "ensembl_species_name",
-        "geneset_version",
     }
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_in.open(newline="") as in_handle:

@@ -11,15 +11,13 @@ The pipeline accepts command-one line arguments to specify a single genome to do
 
 - `--ensembl_species_name` (mandatory): How Ensembl name the species (as it can be different from Tree of Life),
 - `--assembly_accession` (mandatory): The accession number of the assembly,
-- `--geneset_version` (optional): The geneset version to download,
 - `--outdir` (mandatory): Where to download the data.
 
 ```console
 nextflow run sanger-tol/ensemblrepeatdownload -profile singularity --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --outdir ens1
-nextflow run sanger-tol/ensemblrepeatdownload -profile singularity --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --geneset_version 2022_03 --outdir ens2
 ```
 
-When the geneset version is provided, the pipeline downloads it. Otherwise it downloads the repeat-masked genome to which the annotation is attached.
+The pipeline downloads the repeat-masked genome to which the annotation is attached.
 
 ## Bulk download
 
@@ -48,14 +46,6 @@ darwin/data/insects/Noctua_fimbriata/analysis/ilNocFimb1.1,Noctua_fimbriata,GCA_
 | `analysis_dir`         | Output analysis directory for this assembly. Must be a relative path, which will be evaluated from `--outdir`                             |
 | `ensembl_species_name` | Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's                                                        |
 | `assembly_accession`   | Accession number of the assembly to download. Typically of the form `GCA_*.*`.                                                            |
-| `geneset_version`      | (optional) Version of the geneset, usually in the form `YYYY-MM`. When missing, the dataset considered is actually the repeat annotation. |
-
-A samplesheet may contain:
-
-- multiple datasets of the same species
-- multiple datasets of the same assembly
-- multiple datasets in the same output directory
-- any combination of gene and repeat annotation datasets
 
 ## Running the pipeline
 

@@ -15,7 +15,7 @@
 
 ## Introduction
 
-**sanger-tol/ensemblrepeatdownload** is a pipeline that downloads gene and repeat annotations from Ensembl into a Tree of Life directory structure.
+**sanger-tol/ensemblrepeatdownload** is a pipeline that downloads repeat annotations from Ensembl into a Tree of Life directory structure.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
@@ -25,22 +25,12 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Overview
 
-The pipeline takes a CSV file that contains assembly accession number, Ensembl species names (as they may differ from Tree of Life ones !), output directories, and optionally geneset versions.
-When the geneset version is given, the pipeline downloads the Fasta files of the genes (cdna, cds, and protein sequences) as wel as the GFF3 file.
-When the geneset version is _not_ given, the pipeline downloads the repeat annotation as the masked Fasta file and a BED file.
+The pipeline takes a CSV file that contains assembly accession number, Ensembl species names (as they may differ from Tree of Life ones !), output directories.
+Assembly accession numbers are optional too. If missing, the pipeline assumes it can be retrieved from files named `ACCESSION` in the standard location on disk.
+The pipeline downloads the repeat annotation as the masked Fasta file and a BED file.
 All files are compressed with `bgzip`, and indexed with `samtools faidx` or `tabix`.
 
 Steps involved:
-
-_Gene annotation download_:
-
-- Download from the NCBI the GFF3 file, and the sequences of the genes in
-  Fasta format.
-- Compress and index all Fasta files with `bgzip`, `samtools faidx`, and
-  `samtools dict`.
-- Compress and index the GFF3 file with `bgzip` and `tabix`.
-
-_Masked assembly download_:
 
 - Download the masked fasta file from Ensembl.
 - Extract the coordinates of the masked regions into a BED file.
