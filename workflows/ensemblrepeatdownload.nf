@@ -15,12 +15,11 @@ WorkflowEnsemblrepeatdownload.initialise(params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { SAMPLESHEET_CHECK             } from '../modules/local/samplesheet_check'
-
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { DOWNLOAD        } from '../subworkflows/local/download'
+include { PARAMS_CHECK    } from '../subworkflows/local/params_check'
 include { PREPARE_FASTA   } from '../subworkflows/sanger-tol/prepare_fasta'
 include { PREPARE_REPEATS } from '../subworkflows/sanger-tol/prepare_repeats'
 
@@ -45,37 +44,18 @@ workflow ENSEMBLREPEATDOWNLOAD {
 
     ch_versions = Channel.empty()
 
-    ch_inputs = Channel.empty()
-    if (params.input) {
-
-        SAMPLESHEET_CHECK ( file(params.input, checkIfExists: true) )
-            .csv
-            // Provides species_dir, assembly_name, and ensembl_species_name
-            .splitCsv ( header:true, sep:',' )
-            // Add analysis_dir, and load the accession number, following the Tree of Life directory structure
-            .map {
-                it + [
-                    assembly_accession: file("${it["species_dir"]}/assembly/release/${it["assembly_name"]}/insdc/ACCESSION", checkIfExists: true).text.trim(),
-                    analysis_dir: "${it["species_dir"]}/analysis/${it["assembly_name"]}",
-                    ]
-            }
-            .set { ch_inputs }
-
-    } else {
-
-        ch_inputs = Channel.from( [
-            [
-                analysis_dir: params.outdir,
-                assembly_accession: params.assembly_accession,
-                ensembl_species_name: params.ensembl_species_name,
-            ]
-        ] )
-
-    }
+    PARAMS_CHECK (
+        [
+            params.input,
+            params.assembly_accession,
+            params.ensembl_species_name,
+            params.outdir,
+        ]
+    )
 
     // Actual download
     DOWNLOAD (
-        ch_inputs
+        PARAMS_CHECK.out.ensembl_params
     )
     ch_versions         = ch_versions.mix(DOWNLOAD.out.versions)
 

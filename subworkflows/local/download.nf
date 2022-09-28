@@ -8,17 +8,13 @@ include { ENSEMBL_GENOME_DOWNLOAD       } from '../../modules/local/ensembl_geno
 workflow DOWNLOAD {
 
     take:
-    inputs  // maps that indicate what to download (straight from the samplesheet)
+    repeat_params  // tuple(analysis_dir, ensembl_species_name, assembly_accession)
 
 
     main:
     ch_versions = Channel.empty()
 
-    ch_genome_fasta     = ENSEMBL_GENOME_DOWNLOAD (
-        inputs.map {
-            [it["analysis_dir"], it["ensembl_species_name"], it["assembly_accession"]]
-        }
-    ).fasta
+    ch_genome_fasta     = ENSEMBL_GENOME_DOWNLOAD ( repeat_params ).fasta
     ch_versions         = ch_versions.mix(ENSEMBL_GENOME_DOWNLOAD.out.versions)
 
 
