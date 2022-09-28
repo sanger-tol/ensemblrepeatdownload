@@ -30,6 +30,7 @@ class RowChecker:
         self,
         dir_col="species_dir",
         name_col="assembly_name",
+        accession_col="assembly_accession",
         ensembl_name_col="ensembl_species_name",
         **kwargs,
     ):
@@ -41,6 +42,8 @@ class RowChecker:
                 (default "species_dir").
             name_col (str): The name of the column that contains the assembly name
                 (default "assembly_name").
+            accession_col (str): The name of the column that contains the accession
+                number (default "assembly_accession").
             ensembl_name_col(str): The name of the column that contains the Ensembl species name
                 (default "ensembl_species_name").
 
@@ -48,9 +51,11 @@ class RowChecker:
         super().__init__(**kwargs)
         self._dir_col = dir_col
         self._name_col = name_col
+        self._accession_col = accession_col
         self._ensembl_name_col = ensembl_name_col
         self._seen = set()
         self.modified = []
+        self._regex_accession = re.compile(r"^GCA_[0-9]{9}\.[0-9]+$")
 
     def validate_and_transform(self, row):
         """
@@ -63,6 +68,7 @@ class RowChecker:
         """
         self._validate_dir(row)
         self._validate_name(row)
+        self._validate_accession(row)
         self._validate_ensembl_name(row)
         self._seen.add(row[self._name_col])
         self.modified.append(row)
@@ -71,6 +77,13 @@ class RowChecker:
         """Assert that the species directory is non-empty."""
         if not row[self._dir_col]:
             raise AssertionError("Species directory is required.")
+
+    def _validate_accession(self, row):
+        """Assert that the accession number exists and matches the expected nomenclature."""
+        if row[self._accession_col] and not self._regex_accession.match(row[self._accession_col]):
+            raise AssertionError(
+                "Accession numbers must match %s." % self._regex_accession
+            )
 
     def _validate_name(self, row):
         """Assert that the assembly name is non-empty and has no space."""
