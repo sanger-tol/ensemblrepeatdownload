@@ -15,7 +15,7 @@ workflow DOWNLOAD {
     ch_versions = Channel.empty()
 
     ch_genome_fasta     = ENSEMBL_GENOME_DOWNLOAD ( repeat_params ).fasta
-    ch_versions         = ch_versions.mix(ENSEMBL_GENOME_DOWNLOAD.out.versions)
+    ch_versions         = ch_versions.mix(ENSEMBL_GENOME_DOWNLOAD.out.versions.first())
 
 
     emit:
