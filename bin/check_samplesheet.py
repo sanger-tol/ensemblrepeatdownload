@@ -80,7 +80,9 @@ class RowChecker:
 
     def _validate_accession(self, row):
         """Assert that the accession number exists and matches the expected nomenclature."""
-        if row[self._accession_col] and not self._regex_accession.match(row[self._accession_col]):
+        if row[self._accession_col] and not self._regex_accession.match(
+            row[self._accession_col]
+        ):
             raise AssertionError(
                 "Accession numbers must match %s." % self._regex_accession
             )
@@ -99,13 +101,12 @@ class RowChecker:
         if " " in row[self._ensembl_name_col]:
             raise AssertionError("Ensembl names must not contain whitespace.")
 
-    def validate_unique_objects(self):
+    def validate_unique_assemblies(self):
         """
-        Assert that the list of objects to download is unique.
+        Assert that the assembly parameters are unique.
         """
-        assert len(self._seen) == len(
-            self.modified
-        ), "The pair of sample name and FASTQ must be unique."
+        if len(self._seen) != len(self.modified):
+            raise AssertionError("The pair of species directories and assembly names must be unique.")
 
 
 def read_head(handle, num_lines=10):
@@ -136,9 +137,9 @@ def sniff_format(handle):
     peek = read_head(handle)
     handle.seek(0)
     sniffer = csv.Sniffer()
-    #if not sniffer.has_header(peek):
-    #    logger.critical(f"The given sample sheet does not appear to contain a header.")
-    #    sys.exit(1)
+    # if not sniffer.has_header(peek):
+    #     logger.critical(f"The given sample sheet does not appear to contain a header.")
+    #     sys.exit(1)
     dialect = sniffer.sniff(peek)
     return dialect
 
@@ -184,7 +185,7 @@ def check_samplesheet(file_in, file_out):
             except AssertionError as error:
                 logger.critical(f"{str(error)} On line {i + 2}.")
                 sys.exit(1)
-        checker.validate_unique_objects()
+        checker.validate_unique_assemblies()
     header = list(reader.fieldnames)
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_out.open(mode="w", newline="") as out_handle:
