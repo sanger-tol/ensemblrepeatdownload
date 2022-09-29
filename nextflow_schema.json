@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/sanger-tol/ensemblrepeatdownload/master/nextflow_schema.json",
     "title": "sanger-tol/ensemblrepeatdownload pipeline parameters",
-    "description": "Pipeline that downloads annotations from Ensembl into the Tree of Life directory structure",
+    "description": "Pipeline that downloads repeats annotations from Ensembl into the Tree of Life directory structure",
     "type": "object",
     "definitions": {
         "input_output_options": {
@@ -21,6 +21,7 @@
                 "ensembl_species_name": {
                     "type": "string",
                     "description": "Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's",
+                    "pattern": "^\\S+$",
                     "fa_icon": "fas fa-italic"
                 },
                 "outdir": {
@@ -36,13 +37,13 @@
                     "pattern": "^\\S+\\.csv$",
                     "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the assemblies to download. Used for bulk download of many assemblies.",
-                    "help_text": "The file has to be a comma-separated file with 2 columns, and a header row. The columns names must be `assembly_accession` and `assembly_name`.",
+                    "help_text": "The file has to be a comma-separated file with three columns, and a header row. The columns names must be `species_dir`, `assembly_name`, and `ensembl_species_name`. An additional `assembly_accession` column can be provided too.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "ftp_root": {
                     "type": "string",
-                    "description": "Root location of the NCBI FTP, in which all assemblies can be found. Access protocol is actually not limited to FTP, and we use HTTPS by default.",
-                    "default": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA",
+                    "description": "Root location of the Ensembl FTP, in which all annotations can be found. Access protocol is actually not limited to FTP, and we use HTTPS by default.",
+                    "default": "https://ftp.ensembl.org/pub/rapid-release/species",
                     "hidden": true,
                     "fa_icon": "fas fa-link"
                 },
