@@ -7,7 +7,7 @@
             "modules": {
                 "custom/dumpsoftwareversions": {
                     "branch": "master",
-                    "git_sha": "5e7b1ef9a5a2d9258635bcbf70fcf37dacd1b247"
+                    "git_sha": "82501fe6d0d12614db67751d30af98d16e63dc59"
                 },
                 "custom/getchromsizes": {
                     "branch": "master",
@@ -23,7 +23,7 @@
                 },
                 "tabix/bgzip": {
                     "branch": "master",
-                    "git_sha": "5e7b1ef9a5a2d9258635bcbf70fcf37dacd1b247"
+                    "git_sha": "31c0b49f6527ef196e89eca49a36af2de71711f8"
                 },
                 "tabix/tabix": {
                     "branch": "master",
