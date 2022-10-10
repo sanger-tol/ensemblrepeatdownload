@@ -34,7 +34,7 @@ workflow PARAMS_CHECK {
             ] }
             .set { ch_inputs }
 
-        ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions.first())
+        ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions)
     }
 
     // Add the other input channel in, as it's expected to have all the parameters in the right order
