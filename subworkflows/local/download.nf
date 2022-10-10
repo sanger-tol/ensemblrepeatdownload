@@ -14,7 +14,20 @@ workflow DOWNLOAD {
     main:
     ch_versions = Channel.empty()
 
-    ch_genome_fasta     = ENSEMBL_GENOME_DOWNLOAD ( repeat_params ).fasta
+    ch_genome_fasta     = ENSEMBL_GENOME_DOWNLOAD (
+        repeat_params.map { [
+            // meta
+            [
+                id: it[2] + ".masked.ensembl",
+                outdir: it[0],
+            ],
+            // e.g. https://ftp.ensembl.org/pub/rapid-release/species/Agriopis_aurantiaria/GCA_914767915.1/genome/Agriopis_aurantiaria-GCA_914767915.1-softmasked.fa.gz
+            // ftp_path
+            params.ftp_root + "/" + it[1] + "/" + it[2] + "/genome",
+            // remote_filename_stem
+            it[1] + "-" + it[2],
+        ] },
+    ).fasta
     ch_versions         = ch_versions.mix(ENSEMBL_GENOME_DOWNLOAD.out.versions.first())
 
 

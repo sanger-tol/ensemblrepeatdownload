@@ -2,7 +2,7 @@
 // The module checks that the MD5 checksums match before releasing the data.
 // It also uncompresses the files, since we want bgzip compression.
 process ENSEMBL_GENOME_DOWNLOAD {
-    tag "$assembly_accession"
+    tag "${meta.id}"
     label 'process_single'
 
     conda (params.enable_conda ? "bioconda::wget=1.18" : null)
@@ -11,7 +11,7 @@ process ENSEMBL_GENOME_DOWNLOAD {
         'quay.io/biocontainers/gnu-wget:1.18--h7132678_6' }"
 
     input:
-    tuple val(analysis_dir), val(ensembl_species_name), val(assembly_accession)
+    tuple val(meta), val(ftp_path), val(remote_filename_stem)
 
     output:
     tuple val(meta), path("*.fa") , emit: fasta
@@ -21,16 +21,6 @@ process ENSEMBL_GENOME_DOWNLOAD {
     task.ext.when == null || task.ext.when
 
     script:
-
-    // e.g. https://ftp.ensembl.org/pub/rapid-release/species/Agriopis_aurantiaria/GCA_914767915.1/genome/Agriopis_aurantiaria-GCA_914767915.1-softmasked.fa.gz
-    def ftp_path = params.ftp_root + "/" + ensembl_species_name + "/" + assembly_accession + "/genome"
-    def remote_filename_stem = ensembl_species_name + "-" + assembly_accession
-
-    meta = [
-        id : assembly_accession + ".masked.ensembl",
-        outdir: analysis_dir,
-        accession : assembly_accession
-    ]
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
