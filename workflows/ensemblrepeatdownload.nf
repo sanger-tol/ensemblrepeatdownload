@@ -7,15 +7,7 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowEnsembldownload.initialise(params, log)
-
-// TODO nf-core: Add all file path parameters for the pipeline to the list below
-// Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.fasta ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
-
-// Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+WorkflowEnsemblrepeatdownload.initialise(params, log)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,7 +18,10 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { DOWNLOAD        } from '../subworkflows/local/download'
+include { PARAMS_CHECK    } from '../subworkflows/local/params_check'
+include { PREPARE_FASTA   } from '../subworkflows/sanger-tol/prepare_fasta'
+include { PREPARE_REPEATS } from '../subworkflows/sanger-tol/prepare_repeats'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,17 +40,37 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow ENSEMBLDOWNLOAD {
+workflow ENSEMBLREPEATDOWNLOAD {
 
     ch_versions = Channel.empty()
 
-    //
-    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
-    //
-    INPUT_CHECK (
-        ch_input
+    PARAMS_CHECK (
+        params.input,
+        Channel.of(
+            [
+                params.outdir,
+                params.ensembl_species_name,
+                params.assembly_accession,
+            ]
+        ),
     )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    ch_versions         = ch_versions.mix(PARAMS_CHECK.out.versions)
+
+    // Actual download
+    DOWNLOAD (
+        PARAMS_CHECK.out.ensembl_params
+    )
+    ch_versions         = ch_versions.mix(DOWNLOAD.out.versions)
+
+    // Preparation of repeat-masking files
+    PREPARE_FASTA (
+        DOWNLOAD.out.genome
+    )
+    ch_versions         = ch_versions.mix(PREPARE_FASTA.out.versions)
+    PREPARE_REPEATS (
+        DOWNLOAD.out.genome
+    )
+    ch_versions         = ch_versions.mix(PREPARE_REPEATS.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')

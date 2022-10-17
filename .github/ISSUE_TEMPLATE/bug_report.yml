@@ -38,7 +38,7 @@ body:
     id: system
     attributes:
       label: System information
-      description: "* Nextflow version _(eg. 21.10.3)_
+      description: "* Nextflow version _(eg. 22.04.0)_
 
         * Hardware _(eg. HPC, Desktop, Cloud)_
 
@@ -48,6 +48,6 @@ body:
 
         * OS _(eg. CentOS Linux, macOS, Linux Mint)_
 
-        * Version of sanger-tol/ensembldownload _(eg. 1.1, 1.5, 1.8.2)_
+        * Version of sanger-tol/ensemblrepeatdownload _(eg. 1.1, 1.5, 1.8.2)_
 
         "
