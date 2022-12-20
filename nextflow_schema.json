@@ -24,6 +24,12 @@
                     "pattern": "^\\S+$",
                     "fa_icon": "fas fa-italic"
                 },
+                "annotation_method": {
+                    "type": "string",
+                    "description": "Method used to annotate the genome. Typically `ensembl`, `braker`, etc.",
+                    "pattern": "^\\S+$",
+                    "fa_icon": "fas fa-book"
+                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
@@ -37,7 +43,7 @@
                     "pattern": "^\\S+\\.csv$",
                     "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the assemblies to download. Used for bulk download of many assemblies.",
-                    "help_text": "The file has to be a comma-separated file with three columns, and a header row. The columns names must be `species_dir`, `assembly_name`, and `ensembl_species_name`. An additional `assembly_accession` column can be provided too.",
+                    "help_text": "The file has to be a comma-separated file with five columns, and a header row. The columns names must be `species_dir`, `assembly_name`, `ensembl_species_name`, and `annotation_method`. An additional `assembly_accession` column can be provided too.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "ftp_root": {

@@ -8,7 +8,7 @@ include { ENSEMBL_GENOME_DOWNLOAD       } from '../../modules/local/ensembl_geno
 workflow DOWNLOAD {
 
     take:
-    repeat_params  // tuple(analysis_dir, ensembl_species_name, assembly_accession)
+    repeat_params  // tuple(analysis_dir, ensembl_species_name, assembly_accession, annotation_method)
 
 
     main:
@@ -19,11 +19,12 @@ workflow DOWNLOAD {
             // meta
             [
                 id: it[2] + ".masked.ensembl",
+                method: it[3],
                 outdir: it[0],
             ],
-            // e.g. https://ftp.ensembl.org/pub/rapid-release/species/Agriopis_aurantiaria/GCA_914767915.1/genome/Agriopis_aurantiaria-GCA_914767915.1-softmasked.fa.gz
+            // e.g. https://ftp.ensembl.org/pub/rapid-release/species/Agriopis_aurantiaria/GCA_914767915.1/braker/genome/Agriopis_aurantiaria-GCA_914767915.1-softmasked.fa.gz
             // ftp_path
-            params.ftp_root + "/" + it[1] + "/" + it[2] + "/genome",
+            params.ftp_root + "/" + it[1] + "/" + it[2] + "/" + it[3] + "/genome",
             // remote_filename_stem
             it[1] + "-" + it[2],
         ] },
