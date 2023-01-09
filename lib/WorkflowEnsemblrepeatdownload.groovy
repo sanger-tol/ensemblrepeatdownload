@@ -17,10 +17,14 @@ class WorkflowEnsemblrepeatdownload {
                 System.exit(1)
             }
         } else {
-            if (!params.assembly_accession || !params.ensembl_species_name || !params.outdir) {
-                log.error "Either --input, or --assembly_accession, --assembly_name, and --outdir must be provided"
+            if (!params.assembly_accession || !params.ensembl_species_name || !params.annotation_method) {
+                log.error "Either --input, or --assembly_accession, --assembly_name, and --annotation_method must be provided"
                 System.exit(1)
             }
+        }
+        if (!params.outdir) {
+            log.error "--outdir is mandatory"
+            System.exit(1)
         }
     }
 
