@@ -15,19 +15,37 @@ workflow DOWNLOAD {
     ch_versions = Channel.empty()
 
     ch_genome_fasta     = ENSEMBL_GENOME_DOWNLOAD (
-        repeat_params.map { [
-            // meta
-            [
-                id: it[2] + ".masked.ensembl",
-                method: it[3],
-                outdir: it[0],
-            ],
-            // e.g. https://ftp.ensembl.org/pub/rapid-release/species/Agriopis_aurantiaria/GCA_914767915.1/braker/genome/Agriopis_aurantiaria-GCA_914767915.1-softmasked.fa.gz
-            // ftp_path
-            params.ftp_root + "/" + it[1] + "/" + it[2] + "/" + it[3] + "/genome",
-            // remote_filename_stem
-            it[1] + "-" + it[2],
-        ] },
+        repeat_params.map {
+            species_dir,
+            ensembl_species_name,
+            assembly_accession,
+            annotation_method
+
+            -> [
+                // meta
+                [
+                    id: assembly_accession + ".masked.ensembl",
+                    method: annotation_method,
+                    outdir: species_dir,
+                ],
+
+                // e.g. https://ftp.ensembl.org/pub/rapid-release/species/Agriopis_aurantiaria/GCA_914767915.1/braker/genome/Agriopis_aurantiaria-GCA_914767915.1-softmasked.fa.gz
+                // ftp_path
+                [
+                    params.ftp_root,
+                    ensembl_species_name,
+                    assembly_accession,
+                    annotation_method,
+                    "genome",
+                ].join("/"),
+
+                // remote_filename_stem
+                [
+                    ensembl_species_name,
+                    assembly_accession,
+                ].join("-"),
+            ]
+        },
     ).fasta
     ch_versions         = ch_versions.mix(ENSEMBL_GENOME_DOWNLOAD.out.versions.first())
 
