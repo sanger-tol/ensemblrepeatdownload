@@ -48,11 +48,12 @@ workflow ENSEMBLREPEATDOWNLOAD {
         params.input,
         Channel.of(
             [
-                params.outdir,
                 params.ensembl_species_name,
                 params.assembly_accession,
+                params.annotation_method,
             ]
         ),
+        params.outdir,
     )
     ch_versions         = ch_versions.mix(PARAMS_CHECK.out.versions)
 

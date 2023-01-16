@@ -25,9 +25,14 @@
             "ensembl_species_name": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "errorMessage": "Name of the species, as used in the Ensembl FTP"
+                "errorMessage": "The (Ensembl) species name must be provided and cannot contain spaces"
+            },
+            "annotation_method": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "The annotation method must be provided and cannot contain spaces"
             }
         },
-        "required": ["species_dir", "assembly_name", "ensembl_species_name"]
+        "required": ["species_dir", "assembly_name", "ensembl_species_name", "annotation_method"]
     }
 }
