@@ -43,6 +43,7 @@ workflow PARAMS_CHECK {
         ch_inputs = ch_inputs.mix(cli_params.map { [outdir] + it } )
     }
 
+
     emit:
     ensembl_params  = ch_inputs        // tuple(analysis_dir, ensembl_species_name, assembly_accession, annotation_method)
     versions        = ch_versions      // channel: versions.yml
