@@ -69,7 +69,7 @@ workflow ENSEMBLREPEATDOWNLOAD {
     )
     ch_versions         = ch_versions.mix(PREPARE_FASTA.out.versions)
     PREPARE_REPEATS (
-        DOWNLOAD.out.genome
+        PREPARE_FASTA.out.fasta_gz
     )
     ch_versions         = ch_versions.mix(PREPARE_REPEATS.out.versions)
 

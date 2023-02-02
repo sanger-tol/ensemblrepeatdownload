@@ -18,7 +18,7 @@ class WorkflowEnsemblrepeatdownload {
             }
         } else {
             if (!params.assembly_accession || !params.ensembl_species_name || !params.annotation_method) {
-                log.error "Either --input, or --assembly_accession, --assembly_name, and --annotation_method must be provided"
+                log.error "Either --input, or --assembly_accession, --ensembl_species_name, and --annotation_method must be provided"
                 System.exit(1)
             }
         }
