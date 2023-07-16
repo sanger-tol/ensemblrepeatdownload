@@ -2,6 +2,7 @@
 // This file holds several functions specific to the workflow/ensemblrepeatdownload.nf in the sanger-tol/ensemblrepeatdownload pipeline
 //
 
+import nextflow.Nextflow
 import groovy.text.SimpleTemplateEngine
 
 class WorkflowEnsemblrepeatdownload {
@@ -13,8 +14,7 @@ class WorkflowEnsemblrepeatdownload {
         
 
         if (!params.fasta) {
-            log.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
-            System.exit(1)
+            Nextflow.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
         }
     }
 
