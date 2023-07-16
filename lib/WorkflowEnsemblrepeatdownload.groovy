@@ -2,6 +2,8 @@
 // This file holds several functions specific to the workflow/ensemblrepeatdownload.nf in the sanger-tol/ensemblrepeatdownload pipeline
 //
 
+import groovy.text.SimpleTemplateEngine
+
 class WorkflowEnsemblrepeatdownload {
 
     //
