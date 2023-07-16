@@ -20,8 +20,8 @@ WorkflowEnsemblrepeatdownload.initialise(params, log)
 //
 include { DOWNLOAD        } from '../subworkflows/local/download'
 include { PARAMS_CHECK    } from '../subworkflows/local/params_check'
-include { PREPARE_FASTA   } from '../subworkflows/sanger-tol/prepare_fasta'
-include { PREPARE_REPEATS } from '../subworkflows/sanger-tol/prepare_repeats'
+include { PREPARE_FASTA   } from '../subworkflows/local/prepare_fasta'
+include { PREPARE_REPEATS } from '../subworkflows/local/prepare_repeats'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
