@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sanger-tol/ensembldownload
+    sanger-tol/ensemblrepeatdownload
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/sanger-tol/ensembldownload
+    Github : https://github.com/sanger-tol/ensemblrepeatdownload
 ----------------------------------------------------------------------------------------
 */
 
@@ -23,13 +23,13 @@ WorkflowMain.initialise(workflow, params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { ENSEMBLDOWNLOAD } from './workflows/ensembldownload'
+include { ENSEMBLREPEATDOWNLOAD } from './workflows/ensemblrepeatdownload'
 
 //
-// WORKFLOW: Run main sanger-tol/ensembldownload analysis pipeline
+// WORKFLOW: Run main sanger-tol/ensemblrepeatdownload analysis pipeline
 //
-workflow SANGERTOL_ENSEMBLDOWNLOAD {
-    ENSEMBLDOWNLOAD ()
+workflow SANGERTOL_ENSEMBLREPEATDOWNLOAD {
+    ENSEMBLREPEATDOWNLOAD ()
 }
 
 /*
@@ -43,7 +43,7 @@ workflow SANGERTOL_ENSEMBLDOWNLOAD {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    SANGERTOL_ENSEMBLDOWNLOAD ()
+    SANGERTOL_ENSEMBLREPEATDOWNLOAD ()
 }
 
 /*

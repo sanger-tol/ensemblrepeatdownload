@@ -7,7 +7,7 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowEnsembldownload.initialise(params, log)
+WorkflowEnsemblrepeatdownload.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
@@ -59,7 +59,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // Info required for completion email and summary
 def multiqc_report = []
 
-workflow ENSEMBLDOWNLOAD {
+workflow ENSEMBLREPEATDOWNLOAD {
 
     ch_versions = Channel.empty()
 
@@ -86,7 +86,7 @@ workflow ENSEMBLDOWNLOAD {
     //
     // MODULE: MultiQC
     //
-    workflow_summary    = WorkflowEnsembldownload.paramsSummaryMultiqc(workflow, summary_params)
+    workflow_summary    = WorkflowEnsemblrepeatdownload.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
     ch_multiqc_files = Channel.empty()

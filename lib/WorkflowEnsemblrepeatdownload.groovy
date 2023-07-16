@@ -1,8 +1,8 @@
 //
-// This file holds several functions specific to the workflow/ensembldownload.nf in the sanger-tol/ensembldownload pipeline
+// This file holds several functions specific to the workflow/ensemblrepeatdownload.nf in the sanger-tol/ensemblrepeatdownload pipeline
 //
 
-class WorkflowEnsembldownload {
+class WorkflowEnsemblrepeatdownload {
 
     //
     // Check and validate parameters

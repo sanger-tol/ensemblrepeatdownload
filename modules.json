@@ -1,6 +1,6 @@
 {
-    "name": "sanger-tol/ensembldownload",
-    "homePage": "https://github.com/sanger-tol/ensembldownload",
+    "name": "sanger-tol/ensemblrepeatdownload",
+    "homePage": "https://github.com/sanger-tol/ensemblrepeatdownload",
     "repos": {
         "nf-core/modules": {
             "git_url": "https://github.com/nf-core/modules.git",

@@ -1,10 +1,10 @@
 Run Name: $runName
 
 <% if (success){
-    out << "## sanger-tol/ensembldownload execution completed successfully! ##"
+    out << "## sanger-tol/ensemblrepeatdownload execution completed successfully! ##"
 } else {
     out << """####################################################
-## sanger-tol/ensembldownload execution completed unsuccessfully! ##
+## sanger-tol/ensemblrepeatdownload execution completed unsuccessfully! ##
 ####################################################
 The exit status of the task that caused the workflow execution to fail was: $exitStatus.
 The full error message was:
@@ -27,5 +27,5 @@ Pipeline Configuration:
 <% out << summary.collect{ k,v -> " - $k: $v" }.join("\n") %>
 
 --
-sanger-tol/ensembldownload
-https://github.com/sanger-tol/ensembldownload
+sanger-tol/ensemblrepeatdownload
+https://github.com/sanger-tol/ensemblrepeatdownload
