@@ -2,6 +2,7 @@
 // This file holds several functions specific to the workflow/ensemblrepeatdownload.nf in the sanger-tol/ensemblrepeatdownload pipeline
 //
 
+import nextflow.Nextflow
 import groovy.text.SimpleTemplateEngine
 
 class WorkflowEnsemblrepeatdownload {
@@ -15,18 +16,15 @@ class WorkflowEnsemblrepeatdownload {
         if (params.input) {
             def f = new File(params.input);
             if (!f.exists()) {
-                log.error "'${params.input}' doesn't exist"
-                System.exit(1)
+                Nextflow.error "'${params.input}' doesn't exist"
             }
         } else {
             if (!params.assembly_accession || !params.ensembl_species_name || !params.annotation_method) {
-                log.error "Either --input, or --assembly_accession, --ensembl_species_name, and --annotation_method must be provided"
-                System.exit(1)
+                Nextflow.error "Either --input, or --assembly_accession, --ensembl_species_name, and --annotation_method must be provided"
             }
         }
         if (!params.outdir) {
-            log.error "--outdir is mandatory"
-            System.exit(1)
+            Nextflow.error "--outdir is mandatory"
         }
     }
 
