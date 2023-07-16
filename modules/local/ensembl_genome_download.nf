@@ -5,7 +5,7 @@ process ENSEMBL_GENOME_DOWNLOAD {
     tag "${meta.id}"
     label 'process_single'
 
-    conda "bioconda::wget=1.18"
+    conda "bioconda::gnu-wget=1.18"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/gnu-wget:1.18--h7132678_6' :
         'quay.io/biocontainers/gnu-wget:1.18--h7132678_6' }"
