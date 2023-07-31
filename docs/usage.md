@@ -1,5 +1,9 @@
 # sanger-tol/ensemblrepeatdownload: Usage
 
+## :warning: Please read this documentation on the nf-core website: [https://pipelines.tol.sanger.ac.uk/ensemblrepeatdownload/usage](https://pipelines.tol.sanger.ac.uk/ensemblrepeatdownload/usage)
+
+> _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
+
 ## Introduction
 
 The pipeline downloads Enembl repeat annotations for one of multiple assemblies.
