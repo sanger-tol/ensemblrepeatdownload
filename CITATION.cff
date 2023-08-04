@@ -18,7 +18,7 @@ authors:
       affiliation: Wellcome Sanger Institute
 identifiers:
     - type: doi
-      value: 10.5281/zenodo.7183380
+      value: 10.5281/zenodo.7183379
 repository-code: "https://github.com/sanger-tol/ensemblrepeatdownload"
 license: MIT
 commit: TODO
