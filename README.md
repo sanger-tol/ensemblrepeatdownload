@@ -39,8 +39,8 @@ Steps involved:
 
 Now, you can run the pipeline using:
 
-```bash
-nextflow run sanger-tol/ensemblrepeatdownload --input $PWD/assets/samplesheet.csv --outdir <OUTDIR> -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+```console
+nextflow run sanger-tol/ensemblrepeatdownload --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --annotation_method braker
 ```
 
 > **Warning:**
