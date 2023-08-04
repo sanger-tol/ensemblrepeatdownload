@@ -37,7 +37,7 @@ Steps involved:
 > to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
 > with `-profile test` before running the workflow on actual data.
 
-Now, you can run the pipeline using:
+The easiest is to provide the exact species name and versions of the assembly and annotations like this:
 
 ```console
 nextflow run sanger-tol/ensemblrepeatdownload --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --annotation_method braker
