@@ -33,7 +33,7 @@ Those parameters can be retrieved by browsing the [Ensembl Rapid Release](https:
   extract the species name, the assembly accession, and the annotation method.
 
 > [!WARNING]
-> Only the _Rapid Release_ site is currently supported, not the other sites.
+> Only the _Rapid Release_ site is currently supported, not the other Ensembl sites.
 
 Current annotation methods include:
 

@@ -30,6 +30,9 @@ Steps involved:
 - Extract the coordinates of the masked regions into a BED file.
 - Compress and index the BED file with `bgzip` and `tabix`.
 
+> [!WARNING]
+> Only the _Rapid Release_ site is currently supported, not the other Ensembl sites.
+
 ## Usage
 
 > **Note**
