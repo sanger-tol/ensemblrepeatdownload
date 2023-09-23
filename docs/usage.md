@@ -16,7 +16,7 @@ The pipeline accepts command-one line arguments to specify a single genome to do
 - `--ensembl_species_name`: How Ensembl name the species (as it can be different from Tree of Life),
 - `--assembly_accession`: The accession number of the assembly,
 - `--annotation_method`: The annotation method of the geneset related to the repeat annotation (requirement of Ensembl's data-model),
-- `--outdir`: Where to download the data.
+- `--outdir`: Where the pipeline runtime information will be stored, and where data will be downloaded (except if absolute paths are given in the samplesheet).
 
 ```console
 nextflow run sanger-tol/ensemblrepeatdownload -profile singularity --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --annotation_method braker --outdir Noctua_fimbriata_repeats
