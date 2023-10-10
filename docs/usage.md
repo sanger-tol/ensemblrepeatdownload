@@ -16,7 +16,7 @@ The pipeline accepts command-one line arguments to specify a single genome to do
 - `--ensembl_species_name`: How Ensembl name the species (as it can be different from Tree of Life),
 - `--assembly_accession`: The accession number of the assembly,
 - `--annotation_method`: The annotation method of the geneset related to the repeat annotation (requirement of Ensembl's data-model),
-- `--outdir`: Where to download the data.
+- `--outdir`: Where the pipeline runtime information will be stored, and where data will be downloaded (except if absolute paths are given in the samplesheet).
 
 ```console
 nextflow run sanger-tol/ensemblrepeatdownload -profile singularity --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --annotation_method braker --outdir Noctua_fimbriata_repeats
@@ -44,23 +44,22 @@ Current annotation methods include:
 ## Bulk download
 
 The pipeline can download multiple assemblies at once, by providing them in a `.csv` file through the `--input` parameter.
-It has to be a comma-separated file with four or five columns, and a header row as shown in the examples below.
+It has to be a comma-separated file with four columns, and a header row as shown in the examples below.
 
 ```console
-species_dir,assembly_name,assembly_accession,ensembl_species_name,annotation_method
-25g/data/echinoderms/Asterias_rubens,eAstRub1.3,GCA_902459465.3,Asterias_rubens,refseq
-25g/data/insects/Osmia_bicornis,iOsmBic2.1,GCA_907164935.1,Osmia_bicornis_bicornis,ensembl
-25g/data/insects/Osmia_bicornis,iOsmBic2.1_alternate_haplotype,GCA_907164925.1,Osmia_bicornis_bicornis,ensembl
-darwin/data/insects/Noctua_fimbriata,ilNocFimb1.1,GCA_905163415.1,Noctua_fimbriata,braker
+outdir,assembly_accession,ensembl_species_name,annotation_method
+Asterias_rubens/eAstRub1.3,GCA_902459465.3,Asterias_rubens,refseq
+Osmia_bicornis/iOsmBic2.1,GCA_907164935.1,Osmia_bicornis_bicornis,ensembl
+Osmia_bicornis/iOsmBic2.1_alternate_haplotype,GCA_907164925.1,Osmia_bicornis_bicornis,ensembl
+Noctua_fimbriata/ilNocFimb1.1,GCA_905163415.1,Noctua_fimbriata,braker
 ```
 
-| Column                 | Description                                                                                                                                                |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `species_dir`          | Output directory for this species (evaluated from `--outdir` if a relative path). Analysis results are deposited in `analysis/$assembly_name/`.            |
-| `assembly_name`        | Name of the assembly. Used to build the actual output directory.                                                                                           |
-| `assembly_accession`   | (Optional). Accession number of the assembly to download. Typically of the form `GCA_*.*`. If missing, the pipeline will infer it from the ACCESSION file. |
-| `ensembl_species_name` | Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's                                                                         |
-| `annotation_method`    | Name of the method of the geneset that holds the repeat annotation.                                                                                        |
+| Column                 | Description                                                                                                                                     |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `outdir`               | Output directory for this annotation (evaluated from `--outdir` if a relative path). Analysis results are in a sub-directory `repeats/ensembl`. |
+| `assembly_accession`   | Accession number of the assembly to download. Typically of the form `GCA_*.*`. If missing, the pipeline will infer it from the ACCESSION file.  |
+| `ensembl_species_name` | Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's                                                              |
+| `annotation_method`    | Name of the method of the geneset that holds the repeat annotation.                                                                             |
 
 A samplesheet may contain:
 
@@ -69,9 +68,7 @@ A samplesheet may contain:
 - only one row per assembly
 
 All samplesheet columns correspond exactly to their corresponding command-line parameter,
-except `species_dir` which overrides or complements `--oudir`.
-`species_dir` is used to fit the output of this pipeline into a directory structure compatible with the other pipelines
-from Sanger Tree of Life.
+except `outdir` which, if a relative path, is interpreted under `--oudir`.
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
@@ -105,8 +102,8 @@ nextflow run sanger-tol/ensemblrepeatdownload -profile docker -params-file param
 with `params.yaml` containing:
 
 ```yaml
-ensembl_species_name: "Noctua_fimbriata"
 assembly_accession: "GCA_905163415.1"
+ensembl_species_name: "Noctua_fimbriata"
 annotation_method: "braker"
 outdir: "./results/"
 ```

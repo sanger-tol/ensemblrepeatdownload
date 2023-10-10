@@ -7,15 +7,10 @@
     "items": {
         "type": "object",
         "properties": {
-            "species_dir": {
+            "outdir": {
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Species directory must be provided and exist"
-            },
-            "assembly_name": {
-                "type": "string",
-                "pattern": "^\\S+$",
-                "errorMessage": "Assembly name must be provided and cannot contain spaces"
             },
             "assembly_accession": {
                 "type": "string",
@@ -33,6 +28,6 @@
                 "errorMessage": "The annotation method must be provided and cannot contain spaces"
             }
         },
-        "required": ["species_dir", "assembly_name", "ensembl_species_name", "annotation_method"]
+        "required": ["outdir", "assembly_accession", "ensembl_species_name", "annotation_method"]
     }
 }
