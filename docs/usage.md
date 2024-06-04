@@ -1,61 +1,82 @@
 # sanger-tol/ensemblrepeatdownload: Usage
 
+## :warning: Please read this documentation on the nf-core website: [https://pipelines.tol.sanger.ac.uk/ensemblrepeatdownload/usage](https://pipelines.tol.sanger.ac.uk/ensemblrepeatdownload/usage)
+
+> _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
+
 ## Introduction
 
-The pipeline downloads Enembl gene and/or repeat annotations for one of multiple assemblied.
+The pipeline downloads Enembl repeat annotations for one of multiple assemblies.
 It also builds a set of common indices (such as `samtools faidx`, `tabix`).
 
 ## One-off downloads
 
 The pipeline accepts command-one line arguments to specify a single genome to download:
 
-- `--ensembl_species_name` (mandatory): How Ensembl name the species (as it can be different from Tree of Life),
-- `--assembly_accession` (mandatory): The accession number of the assembly,
-- `--outdir` (mandatory): Where to download the data.
+- `--ensembl_species_name`: How Ensembl name the species (as it can be different from Tree of Life),
+- `--assembly_accession`: The accession number of the assembly,
+- `--annotation_method`: The annotation method of the geneset related to the repeat annotation (requirement of Ensembl's data-model),
+- `--outdir`: Where the pipeline runtime information will be stored, and where data will be downloaded (except if absolute paths are given in the samplesheet).
 
 ```console
-nextflow run sanger-tol/ensemblrepeatdownload -profile singularity --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --outdir ens1
+nextflow run sanger-tol/ensemblrepeatdownload -profile singularity --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --annotation_method braker --outdir Noctua_fimbriata_repeats
 ```
 
-The pipeline downloads the repeat-masked genome to which the annotation is attached.
+This will launch the pipeline and download the assembly of `Noctua_fimbriata` accession `GCA_905163415.1` into the `Noctua_fimbriata_repeats/` directory,
+which will be created if needed.
+
+Those parameters can be retrieved by browsing the [Ensembl Rapid Release](https://rapid.ensembl.org/) site.
+
+- Go to the [species list](https://rapid.ensembl.org/info/about/species.html) and click on the
+  annotation link of your species of interest.
+- From the URL, e.g. `https://ftp.ensembl.org/pub/rapid-release/species/Noctua_fimbriata/GCA_905163425.1/braker/geneset/`,
+  extract the species name, the assembly accession, and the annotation method.
+
+> [!WARNING]
+> Only the _Rapid Release_ site is currently supported, not the other Ensembl sites.
+
+Current annotation methods include:
+
+- `ensembl` for Ensembl's own annotation pipeline
+- `braker` for [BRAKER2](https://academic.oup.com/nargab/article/3/1/lqaa108/6066535)
+- `refseq` for [RefSeq](https://academic.oup.com/nar/article/49/D1/D1020/6018440)
 
 ## Bulk download
 
-To download multiple datasets at once, descrbe these in a "samplesheet": a comma-separated files that lists the command-line arguments.
-
-```bash
---input '[path to samplesheet file]'
-```
-
-The file must have four columns, although the last one (`geneset_version`) can have empty values, as in the [example samplesheet](../assets/samplesheet.csv) provided with the pipeline and pasted here:
+The pipeline can download multiple assemblies at once, by providing them in a `.csv` file through the `--input` parameter.
+It has to be a comma-separated file with four columns, and a header row as shown in the examples below.
 
 ```console
-analysis_dir,ensembl_species_name,assembly_accession,geneset_version
-darwin/data/insects/Noctua_fimbriata/analysis/ilNocFimb1.1,Noctua_fimbriata,GCA_905163415.1,2022_03
-25g/data/insects/Osmia_bicornis/analysis/iOsmBic2.1,Osmia_bicornis_bicornis,GCA_907164935.1,
-25g/data/insects/Osmia_bicornis/analysis/iOsmBic2.1,Osmia_bicornis_bicornis,GCA_907164935.1,2021_11
-25g/data/insects/Osmia_bicornis/analysis/iOsmBic2.1_alternate_haplotype,Osmia_bicornis_bicornis,GCA_907164925.1,2022_02
-25g/data/insects/Osmia_bicornis/analysis/iOsmBic2.1_alternate_haplotype,Osmia_bicornis_bicornis,GCA_907164925.1,
-25g/data/echinoderms/Asterias_rubens/analysis/eAstRub1.3,Asterias_rubens,GCA_902459465.3,
-25g/data/echinoderms/Asterias_rubens/analysis/eAstRub1.3,Asterias_rubens,GCA_902459465.3,2020_11
-25g/data/echinoderms/Asterias_rubens/analysis/eAstRub1.3,Asterias_rubens,GCA_902459465.3,2022_03
+outdir,assembly_accession,ensembl_species_name,annotation_method
+Asterias_rubens/eAstRub1.3,GCA_902459465.3,Asterias_rubens,refseq
+Osmia_bicornis/iOsmBic2.1,GCA_907164935.1,Osmia_bicornis_bicornis,ensembl
+Osmia_bicornis/iOsmBic2.1_alternate_haplotype,GCA_907164925.1,Osmia_bicornis_bicornis,ensembl
+Noctua_fimbriata/ilNocFimb1.1,GCA_905163415.1,Noctua_fimbriata,braker
 ```
 
-| Column                 | Description                                                                                                   |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `analysis_dir`         | Output analysis directory for this assembly. Must be a relative path, which will be evaluated from `--outdir` |
-| `ensembl_species_name` | Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's                            |
-| `assembly_accession`   | Accession number of the assembly to download. Typically of the form `GCA_*.*`.                                |
+| Column                 | Description                                                                                                                                     |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `outdir`               | Output directory for this annotation (evaluated from `--outdir` if a relative path). Analysis results are in a sub-directory `repeats/ensembl`. |
+| `assembly_accession`   | Accession number of the assembly to download. Typically of the form `GCA_*.*`. If missing, the pipeline will infer it from the ACCESSION file.  |
+| `ensembl_species_name` | Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's                                                              |
+| `annotation_method`    | Name of the method of the geneset that holds the repeat annotation.                                                                             |
 
-## Running the pipeline
+A samplesheet may contain:
 
-The typical command for running the pipeline is as follows:
+- multiple assemblies of the same species
+- multiple assemblies in the same output directory
+- only one row per assembly
+
+All samplesheet columns correspond exactly to their corresponding command-line parameter,
+except `outdir` which, if a relative path, is interpreted under `--oudir`.
+
+An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
 ```bash
-nextflow run sanger-tol/ensemblrepeatdownload --input samplesheet.csv --outdir <OUTDIR> --genome GRCh37 -profile docker
+nextflow run sanger-tol/ensemblrepeatdownload -profile singularity --input /path/to/samplesheet.csv --outdir /path/to/results
 ```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+## Nextflow outputs
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -63,8 +84,31 @@ Note that the pipeline will create the following files in your working directory
 work                # Directory containing the nextflow working files
 <OUTDIR>            # Finished results in specified location (defined with --outdir)
 .nextflow_log       # Log file from Nextflow
+.nextflow           # Directory where Nextflow keeps track of jobs
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
+
+If you wish to repeatedly use the same parameters for multiple runs, rather than specifying each flag in the command, you can specify these in a params file.
+
+Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
+
+> ⚠️ Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+> The above pipeline run specified with a params file in yaml format:
+
+```bash
+nextflow run sanger-tol/ensemblrepeatdownload -profile docker -params-file params.yaml
+```
+
+with `params.yaml` containing:
+
+```yaml
+assembly_accession: "GCA_905163415.1"
+ensembl_species_name: "Noctua_fimbriata"
+annotation_method: "braker"
+outdir: "./results/"
+```
+
+You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
 
 ### Updating the pipeline
 
@@ -78,9 +122,13 @@ nextflow pull sanger-tol/ensemblrepeatdownload
 
 It is a good idea to specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-First, go to the [sanger-tol/ensemblrepeatdownload releases page](https://github.com/sanger-tol/ensemblrepeatdownload/releases) and find the latest version number - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`.
+First, go to the [sanger-tol/ensemblrepeatdownload releases page](https://github.com/sanger-tol/ensemblrepeatdownload/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
-This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future.
+This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
+
+To further assist in reproducbility, you can use share and re-use [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
+
+> 💡 If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
 
 ## Core Nextflow arguments
 
@@ -90,7 +138,7 @@ This version number will be logged in reports when you run the pipeline, so that
 
 Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
 
-Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Conda) - see below. When using Biocontainers, most of these software packaging methods pull Docker containers from quay.io except for Singularity which directly downloads Singularity images via https hosted by the [Galaxy project](https://depot.galaxyproject.org/singularity/) and Conda which downloads and installs software locally from [Bioconda](https://bioconda.github.io/).
+Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
 
 > We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
 
@@ -99,7 +147,7 @@ The pipeline also dynamically loads configurations from [https://github.com/nf-c
 Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
 They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
-If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended.
+If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer enviroment.
 
 - `docker`
   - A generic configuration profile to be used with [Docker](https://docker.com/)
@@ -111,15 +159,16 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
   - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+- `apptainer`
+  - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `conda`
-  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter or Charliecloud.
+  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 - `test`
   - A profile with a minimal configuration for automated testing
   - Corresponds to defining the assembly to download as command-line parameters so needs no other parameters
-  - Includes links to test data so needs no other parameters
 - `test_full`
   - A profile with a complete configuration for automated testing
-  - Includes links to test data so needs no other parameters
+  - Corresponds to defining the assembly to download as a CSV file so needs no other parameters
 
 ### `-resume`
 
@@ -137,96 +186,19 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher requests (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
-For example, if the nf-core/rnaseq pipeline is failing after multiple re-submissions of the `STAR_ALIGN` process due to an exit code of `137` this would indicate that there is an out of memory issue:
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
 
-```console
-[62/149eb0] NOTE: Process `NFCORE_RNASEQ:RNASEQ:ALIGN_STAR:STAR_ALIGN (WT_REP1)` terminated with an error exit status (137) -- Execution is retried (1)
-Error executing process > 'NFCORE_RNASEQ:RNASEQ:ALIGN_STAR:STAR_ALIGN (WT_REP1)'
+### Custom Containers
 
-Caused by:
-    Process `NFCORE_RNASEQ:RNASEQ:ALIGN_STAR:STAR_ALIGN (WT_REP1)` terminated with an error exit status (137)
+In some cases you may wish to change which container or conda environment a step of the pipeline uses for a particular tool. By default nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However in some cases the pipeline specified version maybe out of date.
 
-Command executed:
-    STAR \
-        --genomeDir star \
-        --readFilesIn WT_REP1_trimmed.fq.gz  \
-        --runThreadN 2 \
-        --outFileNamePrefix WT_REP1. \
-        <TRUNCATED>
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
 
-Command exit status:
-    137
+### Custom Tool Arguments
 
-Command output:
-    (empty)
+A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-Command error:
-    .command.sh: line 9:  30 Killed    STAR --genomeDir star --readFilesIn WT_REP1_trimmed.fq.gz --runThreadN 2 --outFileNamePrefix WT_REP1. <TRUNCATED>
-Work dir:
-    /home/pipelinetest/work/9d/172ca5881234073e8d76f2a19c88fb
-
-Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
-```
-
-To bypass this error you would need to find exactly which resources are set by the `STAR_ALIGN` process. The quickest way is to search for `process STAR_ALIGN` in the [nf-core/rnaseq Github repo](https://github.com/nf-core/rnaseq/search?q=process+STAR_ALIGN).
-We have standardised the structure of Nextflow DSL2 pipelines such that all module files will be present in the `modules/` directory and so, based on the search results, the file we want is `modules/nf-core/software/star/align/main.nf`.
-If you click on the link to that file you will notice that there is a `label` directive at the top of the module that is set to [`label process_high`](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/modules/nf-core/software/star/align/main.nf#L9).
-The [Nextflow `label`](https://www.nextflow.io/docs/latest/process.html#label) directive allows us to organise workflow processes in separate groups which can be referenced in a configuration file to select and configure subset of processes having similar computing requirements.
-The default values for the `process_high` label are set in the pipeline's [`base.config`](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L33-L37) which in this case is defined as 72GB.
-Providing you haven't set any other standard nf-core parameters to **cap** the [maximum resources](https://nf-co.re/usage/configuration#max-resources) used by the pipeline then we can try and bypass the `STAR_ALIGN` process failure by creating a custom config file that sets at least 72GB of memory, in this case increased to 100GB.
-The custom config below can then be provided to the pipeline via the [`-c`](#-c) parameter as highlighted in previous sections.
-
-```nextflow
-process {
-    withName: 'NFCORE_RNASEQ:RNASEQ:ALIGN_STAR:STAR_ALIGN' {
-        memory = 100.GB
-    }
-}
-```
-
-> **NB:** We specify the full process name i.e. `NFCORE_RNASEQ:RNASEQ:ALIGN_STAR:STAR_ALIGN` in the config file because this takes priority over the short name (`STAR_ALIGN`) and allows existing configuration using the full process name to be correctly overridden.
->
-> If you get a warning suggesting that the process selector isn't recognised check that the process name has been specified correctly.
-
-### Updating containers
-
-The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. If for some reason you need to use a different version of a particular tool with the pipeline then you just need to identify the `process` name and override the Nextflow `container` definition for that process using the `withName` declaration. For example, in the [nf-core/viralrecon](https://nf-co.re/viralrecon) pipeline a tool called [Pangolin](https://github.com/cov-lineages/pangolin) has been used during the COVID-19 pandemic to assign lineages to SARS-CoV-2 genome sequenced samples. Given that the lineage assignments change quite frequently it doesn't make sense to re-release the nf-core/viralrecon everytime a new version of Pangolin has been released. However, you can override the default container used by the pipeline by creating a custom config file and passing it as a command-line argument via `-c custom.config`.
-
-1. Check the default version used by the pipeline in the module file for [Pangolin](https://github.com/nf-core/viralrecon/blob/a85d5969f9025409e3618d6c280ef15ce417df65/modules/nf-core/software/pangolin/main.nf#L14-L19)
-2. Find the latest version of the Biocontainer available on [Quay.io](https://quay.io/repository/biocontainers/pangolin?tag=latest&tab=tags)
-3. Create the custom config accordingly:
-
-   - For Docker:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             container = 'quay.io/biocontainers/pangolin:3.0.5--pyhdfd78af_0'
-         }
-     }
-     ```
-
-   - For Singularity:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             container = 'https://depot.galaxyproject.org/singularity/pangolin:3.0.5--pyhdfd78af_0'
-         }
-     }
-     ```
-
-   - For Conda:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             conda = 'bioconda::pangolin=3.0.5'
-         }
-     }
-     ```
-
-> **NB:** If you wish to periodically update individual tool-specific results (e.g. Pangolin) generated by the pipeline then you must ensure to keep the `work/` directory otherwise the `-resume` ability of the pipeline will be compromised and it will restart from scratch.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
 
 ### nf-core/configs
 
@@ -235,6 +207,14 @@ In most cases, you will only need to create a custom config as a one-off but if 
 See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for more information about creating your own configuration files.
 
 If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
+
+## Azure Resource Requests
+
+To be used with the `azurebatch` profile by specifying the `-profile azurebatch`.
+We recommend providing a compute `params.vm_type` of `Standard_D16_v3` VMs by default but these options can be changed if required.
+
+Note that the choice of VM size depends on your quota and the overall workload during the analysis.
+For a thorough list, please refer the [Azure Sizes for virtual machines in Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes).
 
 ## Running in the background
 

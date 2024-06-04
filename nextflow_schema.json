@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/sanger-tol/ensemblrepeatdownload/master/nextflow_schema.json",
     "title": "sanger-tol/ensemblrepeatdownload pipeline parameters",
-    "description": "Pipeline that downloads repeats annotations from Ensembl into the Tree of Life directory structure",
+    "description": "Pipeline to download repeat annotations from Ensembl into a Tree of Life directory structure",
     "type": "object",
     "definitions": {
         "input_output_options": {
@@ -24,10 +24,17 @@
                     "pattern": "^\\S+$",
                     "fa_icon": "fas fa-italic"
                 },
+                "annotation_method": {
+                    "type": "string",
+                    "description": "Method used to annotate the genome. Typically `ensembl`, `braker`, etc.",
+                    "pattern": "^\\S+$",
+                    "fa_icon": "fas fa-book"
+                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
-                    "description": "The output directory where the results will be saved. Not considered when running the pipeline with a .csv file as input.",
+                    "description": "The output directory where the results will be saved. Not considered for sample-sheet entries that have an absolute path.",
+                    "default": "results",
                     "fa_icon": "fas fa-folder-open"
                 },
                 "input": {
@@ -37,7 +44,7 @@
                     "pattern": "^\\S+\\.csv$",
                     "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the assemblies to download. Used for bulk download of many assemblies.",
-                    "help_text": "The file has to be a comma-separated file with three columns, and a header row. The columns names must be `species_dir`, `assembly_name`, and `ensembl_species_name`. An additional `assembly_accession` column can be provided too.",
+                    "help_text": "The file has to be a comma-separated file with four columns, and a header row. The columns names must be `outdir`, `assembly_accession`, `ensembl_species_name`, and `annotation_method`.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "ftp_root": {
@@ -153,6 +160,12 @@
                     "fa_icon": "fas fa-question-circle",
                     "hidden": true
                 },
+                "version": {
+                    "type": "boolean",
+                    "description": "Display version and exit.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
                 "publish_dir_mode": {
                     "type": "string",
                     "default": "copy",
@@ -182,10 +195,17 @@
                     "fa_icon": "fas fa-palette",
                     "hidden": true
                 },
+                "hook_url": {
+                    "type": "string",
+                    "description": "Incoming hook URL for messaging service",
+                    "fa_icon": "fas fa-people-group",
+                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
+                    "hidden": true
+                },
                 "tracedir": {
                     "type": "string",
                     "description": "Directory to keep pipeline Nextflow logs and reports.",
-                    "default": "${params.outdir}/pipeline_info",
+                    "default": "${params.outdir}/pipeline_info/ensemblrepeatdownload",
                     "fa_icon": "fas fa-cogs",
                     "hidden": true
                 },
@@ -202,12 +222,6 @@
                     "description": "Show all params when using `--help`",
                     "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
-                },
-                "enable_conda": {
-                    "type": "boolean",
-                    "description": "Run this workflow with Conda. You can also use '-profile conda' instead of providing this parameter.",
-                    "hidden": true,
-                    "fa_icon": "fas fa-bacon"
                 }
             }
         }

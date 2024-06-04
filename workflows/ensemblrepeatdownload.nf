@@ -20,8 +20,8 @@ WorkflowEnsemblrepeatdownload.initialise(params, log)
 //
 include { DOWNLOAD        } from '../subworkflows/local/download'
 include { PARAMS_CHECK    } from '../subworkflows/local/params_check'
-include { PREPARE_FASTA   } from '../subworkflows/sanger-tol/prepare_fasta'
-include { PREPARE_REPEATS } from '../subworkflows/sanger-tol/prepare_repeats'
+include { PREPARE_FASTA   } from '../subworkflows/local/prepare_fasta'
+include { PREPARE_REPEATS } from '../subworkflows/local/prepare_repeats'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +32,7 @@ include { PREPARE_REPEATS } from '../subworkflows/sanger-tol/prepare_repeats'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,11 +48,12 @@ workflow ENSEMBLREPEATDOWNLOAD {
         params.input,
         Channel.of(
             [
-                params.outdir,
-                params.ensembl_species_name,
                 params.assembly_accession,
+                params.ensembl_species_name,
+                params.annotation_method,
             ]
         ),
+        params.outdir,
     )
     ch_versions         = ch_versions.mix(PARAMS_CHECK.out.versions)
 
@@ -68,7 +69,7 @@ workflow ENSEMBLREPEATDOWNLOAD {
     )
     ch_versions         = ch_versions.mix(PREPARE_FASTA.out.versions)
     PREPARE_REPEATS (
-        DOWNLOAD.out.genome
+        PREPARE_FASTA.out.fasta_gz
     )
     ch_versions         = ch_versions.mix(PREPARE_REPEATS.out.versions)
 
@@ -88,6 +89,9 @@ workflow.onComplete {
         NfcoreTemplate.email(workflow, params, summary_params, projectDir, log)
     }
     NfcoreTemplate.summary(workflow, params, log)
+    if (params.hook_url) {
+        NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
+    }
 }
 
 /*
