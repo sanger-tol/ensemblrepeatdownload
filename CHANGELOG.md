@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update module versions
 - Remove reference to Anaconda repositories
+- Remove defaults from lib/Utils.groovy
+
 
 ### Software dependencies
 
