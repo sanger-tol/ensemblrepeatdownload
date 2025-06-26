@@ -1,10 +1,18 @@
+----------------------------------------------------
+                                        ,--./,-.
+        ___     __   __   __   ___     /,-._.--~\\
+  |\\ | |__  __ /  ` /  \\ |__) |__         }  {
+  | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
+                                        `._,._,'
+  nf-core/ensemblrepeatdownload ${version}
+----------------------------------------------------
 Run Name: $runName
 
 <% if (success){
-    out << "## sanger-tol/ensemblrepeatdownload execution completed successfully! ##"
+    out << "## nf-core/ensemblrepeatdownload execution completed successfully! ##"
 } else {
     out << """####################################################
-## sanger-tol/ensemblrepeatdownload execution completed unsuccessfully! ##
+## nf-core/ensemblrepeatdownload execution completed unsuccessfully! ##
 ####################################################
 The exit status of the task that caused the workflow execution to fail was: $exitStatus.
 The full error message was:
@@ -27,5 +35,5 @@ Pipeline Configuration:
 <% out << summary.collect{ k,v -> " - $k: $v" }.join("\n") %>
 
 --
-sanger-tol/ensemblrepeatdownload
-https://github.com/sanger-tol/ensemblrepeatdownload
+nf-core/ensemblrepeatdownload
+https://github.com/nf-core/ensemblrepeatdownload
