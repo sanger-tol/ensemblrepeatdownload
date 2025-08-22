@@ -7,43 +7,75 @@
 ----------------------------------------------------------------------------------------
 */
 
-nextflow.enable.dsl = 2
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    VALIDATE & PRINT PARAMETER SUMMARY
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-WorkflowMain.initialise(workflow, params, log)
-
+include { ENSEMBLREPEATDOWNLOAD  } from './workflows/ensemblrepeatdownload'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOW FOR PIPELINE
+    NAMED WORKFLOWS FOR PIPELINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-include { ENSEMBLREPEATDOWNLOAD } from './workflows/ensemblrepeatdownload'
 
 //
-// WORKFLOW: Run main sanger-tol/ensemblrepeatdownload analysis pipeline
+// WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow SANGERTOL_ENSEMBLREPEATDOWNLOAD {
-    ENSEMBLREPEATDOWNLOAD ()
-}
 
+    take:
+    inputs      // channel: tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
+
+    main:
+
+    //
+    // WORKFLOW: Run pipeline
+    //
+    ENSEMBLREPEATDOWNLOAD (
+        inputs
+    )
+}
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN ALL WORKFLOWS
+    RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-//
-// WORKFLOW: Execute a single named workflow for the pipeline
-// See: https://github.com/nf-core/rnaseq/issues/619
-//
 workflow {
-    SANGERTOL_ENSEMBLREPEATDOWNLOAD ()
+
+    main:
+    //
+    // SUBWORKFLOW: Run initialisation tasks
+    //
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+    )
+
+    //
+    // WORKFLOW: Run main workflow
+    //
+    SANGERTOL_ENSEMBLREPEATDOWNLOAD (
+        PIPELINE_INITIALISATION.out.inputs
+    )
+    //
+    // SUBWORKFLOW: Run completion tasks
+    //
+    PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+    )
 }
 
 /*
