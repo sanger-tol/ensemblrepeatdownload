@@ -184,6 +184,14 @@
             }
         }
     },
+    "oneOf": [
+        {
+            "required": ["input"]
+        },
+        {
+            "required": ["assembly_accession", "ensembl_species_name", "annotation_method"]
+        }
+    ],
     "allOf": [
         {
             "$ref": "#/$defs/input_output_options"

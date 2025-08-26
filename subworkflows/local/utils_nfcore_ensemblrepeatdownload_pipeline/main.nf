@@ -81,10 +81,6 @@ workflow PIPELINE_INITIALISATION {
 
     } else {
 
-        if (!params.assembly_accession || !params.ensembl_species_name || !params.annotation_method) {
-            Nextflow.error "Either --input, or --assembly_accession, --ensembl_species_name, and --annotation_method must be provided"
-        }
-
         Channel.of(
             [
                 params.outdir,
