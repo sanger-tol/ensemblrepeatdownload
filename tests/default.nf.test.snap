@@ -3,9 +3,6 @@
         "content": [
             8,
             {
-                "CUSTOM_GETCHROMSIZES": {
-                    "getchromsizes": 1.21
-                },
                 "ENSEMBL_GENOME_DOWNLOAD": {
                     "wget": 1.18,
                     "BusyBox": "v1.32.1"
@@ -14,7 +11,10 @@
                     "repeats_bed.py": 1.1
                 },
                 "SAMTOOLS_DICT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.22.1"
                 },
                 "TABIX_BGZIP": {
                     "tabix": 1.21
@@ -59,6 +59,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-01T14:56:44.666389697"
+        "timestamp": "2025-12-01T15:46:45.170433294"
     }
 }
