@@ -53,5 +53,5 @@ workflow DOWNLOAD {
 
     emit:
     genome   = ch_genome_fasta           // path: genome.fa
-    versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+    versions = ch_versions               // channel: [ versions.yml ]
 }
