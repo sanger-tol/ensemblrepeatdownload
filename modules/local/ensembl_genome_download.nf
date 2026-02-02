@@ -6,16 +6,16 @@ process ENSEMBL_GENOME_DOWNLOAD {
     label 'process_single'
 
     conda "bioconda::gnu-wget=1.18"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/gnu-wget:1.18--h7132678_6' :
-        'biocontainers/gnu-wget:1.18--h7132678_6' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/gnu-wget:1.18--h7132678_6'
+        : 'biocontainers/gnu-wget:1.18--h7132678_6'}"
 
     input:
     tuple val(meta), val(ftp_path), val(remote_filename_stem)
 
     output:
-    tuple val(meta), path("*.fa") , emit: fasta
-    path  "versions.yml"          , emit: versions
+    tuple val(meta), path("*.fa"), emit: fasta
+    path "versions.yml", emit: versions
 
     when:
     task.ext.when == null || task.ext.when

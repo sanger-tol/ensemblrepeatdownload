@@ -13,7 +13,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { ENSEMBLREPEATDOWNLOAD  } from './workflows/ensemblrepeatdownload'
+include { ENSEMBLREPEATDOWNLOAD   } from './workflows/ensemblrepeatdownload'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
 /*
@@ -26,16 +26,15 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ense
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow SANGERTOL_ENSEMBLREPEATDOWNLOAD {
-
     take:
-    inputs      // channel: tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
+    inputs // channel: tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
 
     main:
 
     //
     // WORKFLOW: Run pipeline
     //
-    ENSEMBLREPEATDOWNLOAD (
+    ENSEMBLREPEATDOWNLOAD(
         inputs
     )
 }
@@ -46,12 +45,10 @@ workflow SANGERTOL_ENSEMBLREPEATDOWNLOAD {
 */
 
 workflow {
-
-    main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
-    PIPELINE_INITIALISATION (
+    PIPELINE_INITIALISATION(
         params.version,
         params.validate_params,
         params.monochrome_logs,
@@ -60,19 +57,19 @@ workflow {
         params.input,
         params.help,
         params.help_full,
-        params.show_hidden
+        params.show_hidden,
     )
 
     //
     // WORKFLOW: Run main workflow
     //
-    SANGERTOL_ENSEMBLREPEATDOWNLOAD (
+    SANGERTOL_ENSEMBLREPEATDOWNLOAD(
         PIPELINE_INITIALISATION.out.inputs
     )
     //
     // SUBWORKFLOW: Run completion tasks
     //
-    PIPELINE_COMPLETION (
+    PIPELINE_COMPLETION(
         params.email,
         params.email_on_fail,
         params.plaintext_email,
