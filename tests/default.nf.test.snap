@@ -1,0 +1,64 @@
+{
+    "-profile test": {
+        "content": [
+            8,
+            {
+                "ENSEMBL_GENOME_DOWNLOAD": {
+                    "wget": 1.18,
+                    "BusyBox": "v1.32.1"
+                },
+                "REPEATS_BED": {
+                    "repeats_bed.py": 1.1
+                },
+                "SAMTOOLS_DICT": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.22.1"
+                },
+                "TABIX_BGZIP": {
+                    "tabix": 1.21
+                },
+                "TABIX_TABIX_CSI": {
+                    "tabix": 1.21
+                },
+                "TABIX_TABIX_TBI": {
+                    "tabix": 1.21
+                },
+                "Workflow": {
+                    "sanger-tol/ensemblrepeatdownload": "v2.0.1"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/ensemblrepeatdownload_software_versions.yml",
+                "repeats",
+                "repeats/ensembl",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.bed.gz",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.bed.gz.csi",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.bed.gz.gzi",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.bed.gz.tbi",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.fa.dict",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.fa.gz",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.fa.gz.fai",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.fa.gz.gzi",
+                "repeats/ensembl/GCA_907164925.1.masked.ensembl.fa.gz.sizes"
+            ],
+            [
+                "GCA_907164925.1.masked.ensembl.bed.gz:md5,50086d095f1ce425103401f3c77d1ad8",
+                "GCA_907164925.1.masked.ensembl.bed.gz.csi:md5,65b3ce4940fbd1cb3b08f26e85f2e56b",
+                "GCA_907164925.1.masked.ensembl.bed.gz.gzi:md5,f2282a205cbc29b671afde2a8d64b49c",
+                "GCA_907164925.1.masked.ensembl.bed.gz.tbi:md5,8c904f1dc971ad62421bd4565eb7f1ff",
+                "GCA_907164925.1.masked.ensembl.fa.gz:md5,afe44da9a1db9225e8643f82dc5770c3",
+                "GCA_907164925.1.masked.ensembl.fa.gz.fai:md5,d2ad6cbd405b8baa792849bdf8c9a158",
+                "GCA_907164925.1.masked.ensembl.fa.gz.gzi:md5,829a5e0fe1e139c4360bd5946ad74fc9",
+                "GCA_907164925.1.masked.ensembl.fa.gz.sizes:md5,55280b16624d33c2d3a5b957fab1c8f7"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2025-12-01T15:46:45.170433294"
+    }
+}
