@@ -38,8 +38,6 @@ workflow PIPELINE_INITIALISATION {
 
     main:
 
-    ch_versions = channel.empty()
-
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
     //
@@ -126,7 +124,6 @@ workflow PIPELINE_INITIALISATION {
 
     emit:
     inputs   = ch_inputs
-    versions = ch_versions
 }
 
 /*

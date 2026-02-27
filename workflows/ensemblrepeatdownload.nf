@@ -45,18 +45,15 @@ workflow ENSEMBLREPEATDOWNLOAD {
     DOWNLOAD(
         inputs
     )
-    ch_versions = ch_versions.mix(DOWNLOAD.out.versions)
 
     // Preparation of repeat-masking files
     PREPARE_FASTA(
         DOWNLOAD.out.genome
     )
-    ch_versions = ch_versions.mix(PREPARE_FASTA.out.versions)
 
     PREPARE_REPEATS(
         PREPARE_FASTA.out.fasta_gz
     )
-    ch_versions = ch_versions.mix(PREPARE_REPEATS.out.versions)
 
     //
     // Collate and save software versions

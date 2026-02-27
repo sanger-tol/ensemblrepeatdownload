@@ -15,7 +15,7 @@ process ENSEMBL_GENOME_DOWNLOAD {
 
     output:
     tuple val(meta), path("*.fa"), emit: fasta
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('wget'), eval("wget --version | head -n 1 | cut -d' ' -f3"), topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -35,11 +35,5 @@ process ENSEMBL_GENOME_DOWNLOAD {
         md5sum -c md5checksums_restricted.txt
     fi
     zcat ${remote_filename_stem}-softmasked.fa.gz > ${prefix}.fa
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        wget: \$(wget --version | head -n 1 | cut -d' ' -f3)
-        BusyBox: \$(busybox | head -1 | cut -d' ' -f2)
-    END_VERSIONS
     """
 }

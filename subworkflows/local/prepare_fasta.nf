@@ -12,15 +12,14 @@ workflow PREPARE_FASTA {
     fasta // file: /path/to/genome.fa
 
     main:
-    ch_versions = channel.empty()
 
     // Compress the Fasta file
     ch_compressed_fasta = TABIX_BGZIP(fasta).output
-    ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions)
 
     // Generate Samtools index and chromosome sizes file
-    ch_samtools_faidx = SAMTOOLS_FAIDX(ch_compressed_fasta, [[], []], true).fai
-    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
+    ch_fasta_with_dummy_fai = ch_compressed_fasta
+        .map {meta, fasta -> [meta, fasta, []]}
+    ch_samtools_faidx = SAMTOOLS_FAIDX(ch_fasta_with_dummy_fai, true).fai
 
     // Read the .fai file, extract sequence statistics, and make an extended meta map
     sequence_map = ch_samtools_faidx.map { meta, fai ->
@@ -34,7 +33,6 @@ workflow PREPARE_FASTA {
     expanded_fasta = fasta.join(sequence_map).map { _meta, path, ext_meta -> [ext_meta, path] }
     // Generate Samtools dictionary
     ch_samtools_dict = SAMTOOLS_DICT(expanded_fasta).dict
-    ch_versions = ch_versions.mix(SAMTOOLS_DICT.out.versions)
 
     emit:
     fasta_gz = fasta_gz // path: genome.fa.gz
@@ -42,7 +40,6 @@ workflow PREPARE_FASTA {
     dict     = ch_samtools_dict // path: genome.fa.dict
     gzi      = gzi // path: genome.fa.gz.gzi
     sizes    = sizes // path: genome.fa.gz.sizes
-    versions = ch_versions // channel: [ versions.yml ]
 }
 
 // Read the .fai file to extract the number of sequences, the maximum and total sequence length
