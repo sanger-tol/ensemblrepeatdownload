@@ -48,7 +48,6 @@
                 "GCA_907164925.1.repeats.ensembl.bed.gz.gzi:md5,f2282a205cbc29b671afde2a8d64b49c",
                 "GCA_907164925.1.repeats.ensembl.bed.gz.tbi:md5,8c904f1dc971ad62421bd4565eb7f1ff",
                 "GCA_907164925.1.repeats.ensembl.masked.fa.gz:md5,afe44da9a1db9225e8643f82dc5770c3",
-                "GCA_907164925.1.repeats.ensembl.masked.fa.gz.dict:md5,e09138ac5611ddac021a32c786fe25d3",
                 "GCA_907164925.1.repeats.ensembl.masked.fa.gz.fai:md5,d2ad6cbd405b8baa792849bdf8c9a158",
                 "GCA_907164925.1.repeats.ensembl.masked.fa.gz.gzi:md5,829a5e0fe1e139c4360bd5946ad74fc9",
                 "GCA_907164925.1.repeats.ensembl.masked.fa.gz.sizes:md5,55280b16624d33c2d3a5b957fab1c8f7"
@@ -58,6 +57,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-03-02T15:24:05.11908034"
+        "timestamp": "2026-03-02T16:17:27.397540155"
     }
 }
