@@ -41,5 +41,5 @@ workflow DOWNLOAD {
     ).fasta
 
     emit:
-    genome   = ch_genome_fasta // path: genome.fa
+    genome = ch_genome_fasta // path: genome.fa
 }

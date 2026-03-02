@@ -123,7 +123,7 @@ workflow PIPELINE_INITIALISATION {
     }
 
     emit:
-    inputs   = ch_inputs
+    inputs = ch_inputs
 }
 
 /*
