@@ -10,14 +10,13 @@ workflow DOWNLOAD {
     repeat_params // tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
 
     main:
-    ch_versions = channel.empty()
 
     ch_genome_fasta = ENSEMBL_GENOME_DOWNLOAD(
         repeat_params.map { outdir, assembly_accession, ensembl_species_name, annotation_method ->
             [
                 // meta
                 [
-                    id: assembly_accession + ".masked.ensembl",
+                    id: assembly_accession + ".repeats.ensembl",
                     method: annotation_method,
                     outdir: outdir,
                 ],
@@ -40,9 +39,7 @@ workflow DOWNLOAD {
             ]
         }
     ).fasta
-    ch_versions = ch_versions.mix(ENSEMBL_GENOME_DOWNLOAD.out.versions.first())
 
     emit:
-    genome   = ch_genome_fasta // path: genome.fa
-    versions = ch_versions // channel: [ versions.yml ]
+    genome = ch_genome_fasta // path: genome.fa
 }

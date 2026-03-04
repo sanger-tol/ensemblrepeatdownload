@@ -13,9 +13,9 @@
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { DOWNLOAD               } from '../subworkflows/local/download'
-include { PREPARE_FASTA          } from '../subworkflows/local/prepare_fasta'
-include { PREPARE_REPEATS        } from '../subworkflows/local/prepare_repeats'
+include { DOWNLOAD                  } from '../subworkflows/local/download'
+include { FASTA_COMPRESS_INDEX      } from '../subworkflows/sanger-tol/fasta_compress_index/main'
+include { SOFT_MASKED_FASTA_REPEATS } from '../subworkflows/sanger-tol/soft_masked_fasta_repeats/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -23,9 +23,9 @@ include { PREPARE_REPEATS        } from '../subworkflows/local/prepare_repeats'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
+include { paramsSummaryMap          } from 'plugin/nf-schema'
+include { softwareVersionsToYAML    } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText    } from '../subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,18 +45,17 @@ workflow ENSEMBLREPEATDOWNLOAD {
     DOWNLOAD(
         inputs
     )
-    ch_versions = ch_versions.mix(DOWNLOAD.out.versions)
 
     // Preparation of repeat-masking files
-    PREPARE_FASTA(
-        DOWNLOAD.out.genome
+    FASTA_COMPRESS_INDEX(
+        DOWNLOAD.out.genome,
+        true,
     )
-    ch_versions = ch_versions.mix(PREPARE_FASTA.out.versions)
 
-    PREPARE_REPEATS(
-        PREPARE_FASTA.out.fasta_gz
+    ch_fasta_sequence_length = FASTA_COMPRESS_INDEX.out.fasta_gz.map { meta, fasta -> [meta, fasta, meta.max_length] }
+    SOFT_MASKED_FASTA_REPEATS(
+        ch_fasta_sequence_length
     )
-    ch_versions = ch_versions.mix(PREPARE_REPEATS.out.versions)
 
     //
     // Collate and save software versions
@@ -91,9 +90,3 @@ workflow ENSEMBLREPEATDOWNLOAD {
     emit:
     versions = ch_collated_versions // channel: [ path(versions.yml) ]
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
