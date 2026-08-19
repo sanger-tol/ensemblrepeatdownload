@@ -35,15 +35,16 @@ include { methodsDescriptionText    } from '../subworkflows/local/utils_nfcore_e
 
 workflow ENSEMBLREPEATDOWNLOAD {
     take:
-    inputs // channel: tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
+    ch_samplesheet // channel: samplesheet read in from --input. tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
+    outdir
 
     main:
 
-    ch_versions = channel.empty()
+    def ch_versions = channel.empty()
 
     // Actual download
     DOWNLOAD(
-        inputs
+        ch_samplesheet
     )
 
     // Preparation of repeat-masking files
@@ -77,16 +78,14 @@ workflow ENSEMBLREPEATDOWNLOAD {
             "${process}:\n${tool_versions.join('\n')}"
         }
 
-    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+    def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
         .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'ensemblrepeatdownload_software_' + 'versions.yml',
+            storeDir: "${outdir}/pipeline_info",
+            name:  'ensemblrepeatdownload_software_'  + 'versions.yml',
             sort: true,
-            newLine: true,
+            newLine: true
         )
-        .set { ch_collated_versions }
-
     emit:
     versions = ch_collated_versions // channel: [ path(versions.yml) ]
 }
