@@ -3,9 +3,29 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT LOCAL MODULES/SUBWORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+//
+include { DOWNLOAD                  } from '../subworkflows/local/download'
+include { FASTA_COMPRESS_INDEX      } from '../subworkflows/sanger-tol/fasta_compress_index/main'
+include { SOFT_MASKED_FASTA_REPEATS } from '../subworkflows/sanger-tol/soft_masked_fasta_repeats/main'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT NF-CORE MODULES/SUBWORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+include { paramsSummaryMap          } from 'plugin/nf-schema'
+include { softwareVersionsToYAML    } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText    } from '../subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -14,14 +34,29 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_ense
 */
 
 workflow ENSEMBLREPEATDOWNLOAD {
-
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
+    ch_samplesheet // channel: samplesheet read in from --input. tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
     outdir
 
     main:
 
     def ch_versions = channel.empty()
+
+    // Actual download
+    DOWNLOAD(
+        ch_samplesheet
+    )
+
+    // Preparation of repeat-masking files
+    FASTA_COMPRESS_INDEX(
+        DOWNLOAD.out.genome,
+        true,
+    )
+
+    ch_fasta_sequence_length = FASTA_COMPRESS_INDEX.out.fasta_gz.map { meta, fasta -> [meta, fasta, meta.max_length] }
+    SOFT_MASKED_FASTA_REPEATS(
+        ch_fasta_sequence_length
+    )
 
     //
     // Collate and save software versions
@@ -35,9 +70,9 @@ workflow ENSEMBLREPEATDOWNLOAD {
 
     def topic_versions_string = topic_versions.versions_tuple
         .map { process, tool, version ->
-            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+            [process[process.lastIndexOf(':') + 1..-1], "  ${tool}: ${version}"]
         }
-        .groupTuple(by:0)
+        .groupTuple(by: 0)
         .map { process, tool_versions ->
             tool_versions.unique().sort()
             "${process}:\n${tool_versions.join('\n')}"
@@ -52,11 +87,5 @@ workflow ENSEMBLREPEATDOWNLOAD {
             newLine: true
         )
     emit:
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    versions = ch_collated_versions // channel: [ path(versions.yml) ]
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/

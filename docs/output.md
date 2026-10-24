@@ -4,15 +4,47 @@
 
 This document describes the output produced by the pipeline.
 
-The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
+The directories listed below will be created in the results directory (or `species_dir` when using a samplesheet) after the pipeline has finished.
+All paths are relative to the top-level results directory.
 
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
+The directories comply with Tree of Life's canonical directory structure.
 
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
+- [Repeat annotation files](#repeat-annotation-files) - Files corresponding to repeat annotation produced by Ensembl
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+
+All data files are compressed (and indexed) with `bgzip`.
+
+All Fasta files are indexed with `samtools faidx`, which allows accessing any region of the assembly in constant time, and `samtools dict`, which allows identifying a sequence by its MD5 checksum.
+
+All BED files are indexed with tabix in both TBI and CSI modes, unless the sequences are too large.
+
+### Repeat annotation files
+
+Here are the files you can expect in the results directory.
+
+```text
+└── repeats
+    └── ensembl
+        ├── GCA_907164925.1.masked.ensembl.bed.gz
+        ├── GCA_907164925.1.masked.ensembl.bed.gz.csi
+        ├── GCA_907164925.1.masked.ensembl.bed.gz.gzi
+        ├── GCA_907164925.1.masked.ensembl.bed.gz.tbi
+        ├── GCA_907164925.1.masked.ensembl.fa.dict
+        ├── GCA_907164925.1.masked.ensembl.fa.gz
+        ├── GCA_907164925.1.masked.ensembl.fa.gz.fai
+        ├── GCA_907164925.1.masked.ensembl.fa.gz.gzi
+        └── GCA_907164925.1.masked.ensembl.fa.gz.sizes
+```
+
+They all correspond to the repeat-masking analysis run by Ensembl themselves.
+All files are named after the assembly accession, e.g. `GCA_907164925.1`.
+
+- `GCA_*.masked.ncbi.fasta.gz`: Masked assembly in Fasta format
+- `GCA_*.masked.ncbi.bed.gz`: BED file with the coordinates of the regions masked by the Ensembl pipeline
 
 ### Pipeline information
 
