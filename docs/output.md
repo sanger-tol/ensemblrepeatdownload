@@ -4,7 +4,8 @@
 
 This document describes the output produced by the pipeline.
 
-The directories listed below will be created in the results directory (or `species_dir` when using a samplesheet) after the pipeline has finished.
+The directories listed below will be created in a directory based on the `--outdir` command-line parameter and the `outdir` column of the samplesheet.
+) after the pipeline has finished.
 All paths are relative to the top-level results directory.
 
 The directories comply with Tree of Life's canonical directory structure.
