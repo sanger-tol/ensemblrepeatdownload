@@ -1,5 +1,6 @@
 authors:
   - affiliation: Wellcome Sanger Institute
+    email: tc25@sanger.ac.uk
     family-names: Chafin
     given-names: Tyler
     orcid: https://orcid.org/0000-0001-8687-5905
@@ -11,6 +12,7 @@ authors:
     orcid: https://orcid.org/0000-0002-7860-3560
     website: https://github.com/muffato
   - affiliation: Wellcome Sanger Institute
+    email: 729395+gq1@users.noreply.github.com
     family-names: Qi
     given-names: Guoying
     orcid: https://orcid.org/0000-0003-1262-8973
@@ -27,7 +29,7 @@ license: MIT
 message: If you use this software, please cite it using the metadata from this file
   and all references from CITATIONS.md .
 repository-code: https://github.com/sanger-tol/ensembldownload
-title: sanger-tol/ensembldownload v2.0.1 - Shadowfax the Planerider (patch 1)
+title: sanger-tol/ensembldownload v3.0.0 - Flamboyant Smaug
 type: software
 url: https://pipelines.tol.sanger.ac.uk/ensembldownload
-version: 2.0.1
+version: 3.0.0
