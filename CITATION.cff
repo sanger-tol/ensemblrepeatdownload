@@ -26,8 +26,8 @@ doi: 10.5281/zenodo.7183379
 license: MIT
 message: If you use this software, please cite it using the metadata from this file
   and all references from CITATIONS.md .
-repository-code: https://github.com/sanger-tol/ensemblrepeatdownload
-title: sanger-tol/ensemblrepeatdownload v2.0.1 - Shadowfax the Planerider (patch 1)
+repository-code: https://github.com/sanger-tol/ensembldownload
+title: sanger-tol/ensembldownload v2.0.1 - Shadowfax the Planerider (patch 1)
 type: software
-url: https://pipelines.tol.sanger.ac.uk/ensemblrepeatdownload
+url: https://pipelines.tol.sanger.ac.uk/ensembldownload
 version: 2.0.1

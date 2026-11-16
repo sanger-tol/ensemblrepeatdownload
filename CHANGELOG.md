@@ -1,9 +1,9 @@
-# sanger-tol/ensemblrepeatdownload: Changelog
+# sanger-tol/ensembldownload: Changelog
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [[3.0.0](https://github.com/sanger-tol/ensemblrepeatdownload/releases/tag/3.0.0)] - Flamboyant Smaug - [2026-11-20]
+## [[3.0.0](https://github.com/sanger-tol/ensembldownload/releases/tag/3.0.0)] - Flamboyant Smaug - [2026-11-20]
 
 - Support Ensembl's new FTP structure <https://ftp.ebi.ac.uk/pub/ensemblorganisms/GCA/> which
   provides data _already compressed with `bgzip` and indexed_ !
@@ -30,7 +30,7 @@ _In the samplesheet_
 
 > **NB:** Parameter has been **updated** if both old and new parameter information is present. </br> **NB:** Parameter has been **added** if just the new parameter information is present. </br> **NB:** Parameter has been **removed** if new parameter information isn't present.
 
-## [[2.0.1](https://github.com/sanger-tol/ensemblrepeatdownload/releases/tag/2.0.1)] - Shadowfax the Planerider (patch 1) - [2024-12-05]
+## [[2.0.1](https://github.com/sanger-tol/ensembldownload/releases/tag/2.0.1)] - Shadowfax the Planerider (patch 1) - [2024-12-05]
 
 ### Enhancements & fixes
 
@@ -48,7 +48,7 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 | `samtools` | 1.17        | 1.21        |
 | `tabix`    | 1.11        | 1.20        |
 
-## [[2.0.0](https://github.com/sanger-tol/ensemblrepeatdownload/releases/tag/2.0.0)] – Shadowfax the Planerider – [2024-06-04]
+## [[2.0.0](https://github.com/sanger-tol/ensembldownload/releases/tag/2.0.0)] – Shadowfax the Planerider – [2024-06-04]
 
 This version supports the new FTP structure of Ensembl
 
@@ -85,9 +85,9 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 | ---------- | ----------- | ----------- |
 | multiqc    | 1.13        | 1.14        |
 
-## [[1.0.0](https://github.com/sanger-tol/ensemblrepeatdownload/releases/tag/1.0.0)] – Gwaihir the Windlord – [2022-10-19]
+## [[1.0.0](https://github.com/sanger-tol/ensembldownload/releases/tag/1.0.0)] – Gwaihir the Windlord – [2022-10-19]
 
-Initial release of sanger-tol/ensemblrepeatdownload, created with the [nf-core](https://nf-co.re/) template.
+Initial release of sanger-tol/ensembldownload, created with the [nf-core](https://nf-co.re/) template.
 
 ### `Added`
 

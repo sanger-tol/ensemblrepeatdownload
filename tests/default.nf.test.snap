@@ -15,12 +15,12 @@
                     "softmask2bed": 1.0
                 },
                 "Workflow": {
-                    "sanger-tol/ensemblrepeatdownload": "v2.0.1"
+                    "sanger-tol/ensembldownload": "v2.0.1"
                 }
             },
             [
                 "pipeline_info",
-                "pipeline_info/ensemblrepeatdownload_software_versions.yml",
+                "pipeline_info/ensembldownload_software_versions.yml",
                 "repeats",
                 "repeats/ensembl",
                 "repeats/ensembl/GCA_907164925.1.repeats.ensembl.bed.gz",
