@@ -27,7 +27,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ense
 //
 workflow SANGERTOL_ENSEMBLREPEATDOWNLOAD {
     take:
-    samplesheet // channel: tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
+    samplesheet // channel: tuple(outdir, assembly_accession, annotation_method, geneset_version)
 
     main:
 

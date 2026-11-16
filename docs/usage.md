@@ -13,27 +13,24 @@ It also builds a set of common indices (such as `samtools faidx`, `tabix`).
 
 The pipeline accepts command-one line arguments to specify a single genome to download:
 
-- `--ensembl_species_name`: How Ensembl name the species (as it can be different from Tree of Life),
 - `--assembly_accession`: The accession number of the assembly,
 - `--annotation_method`: The annotation method of the geneset related to the repeat annotation (requirement of Ensembl's data-model),
+- `--geneset_version`: The geneset version to download,
 - `--outdir`: Where the pipeline runtime information will be stored, and where data will be downloaded (except if absolute paths are given in the samplesheet).
 
 ```bash
-nextflow run sanger-tol/ensemblrepeatdownload --ensembl_species_name Noctua_fimbriata --assembly_accession GCA_905163415.1 --annotation_method braker --outdir Noctua_fimbriata_repeats
+nextflow run sanger-tol/ensemblrepeatdownload -profile singularity --assembly_accession GCA_905163415.1 --annotation_method braker --geneset_version 2022_03 --outdir Noctua_fimbriata_braker_2022_03
 ```
 
-This will launch the pipeline and download the assembly of `Noctua_fimbriata` accession `GCA_905163415.1` into the `Noctua_fimbriata_repeats/` directory,
+This will launch the pipeline and download the repeat annotation that was performed by Ensembl for its `2022_03` _Braker_ annotation of the assembly `GCA_905163415.1` into the `Noctua_fimbriata_braker_2022_03/` directory,
 which will be created if needed.
 
-Those parameters can be retrieved by browsing the [Ensembl Rapid Release](https://rapid.ensembl.org/) site.
+Annotation parameters can be retrieved by browsing the [Ensembl](https://www.ensembl.org/) site.
 
-- Go to the [species list](https://rapid.ensembl.org/info/about/species.html) and click on the
-  annotation link of your species of interest.
-- From the URL, e.g. `https://ftp.ensembl.org/pub/rapid-release/species/Noctua_fimbriata/GCA_905163425.1/braker/geneset/`,
-  extract the species name, the assembly accession, and the annotation method.
-
-> [!WARNING]
-> Only the _Rapid Release_ site is currently supported, not the other Ensembl sites.
+- Go to the assembly page <https://www.ensembl.org/genome/GCA_905163415.1>
+  and click on the "Get files" button on the right-hand side.
+- From the URL of any link, e.g. `https://ftp.ebi.ac.uk/pub/ensemblorganisms/GCA/905/163/415/1/braker/2022_03/genome`,
+  extract the annotation method and version.
 
 Current annotation methods include:
 
@@ -47,25 +44,25 @@ The pipeline can download multiple assemblies at once, by providing them in a `.
 It has to be a comma-separated file with four columns, and a header row as shown in the examples below.
 
 ```csv title="samplesheet.csv"
-outdir,assembly_accession,ensembl_species_name,annotation_method
-Asterias_rubens/eAstRub1.3,GCA_902459465.3,Asterias_rubens,refseq
-Osmia_bicornis/iOsmBic2.1,GCA_907164935.1,Osmia_bicornis_bicornis,ensembl
-Osmia_bicornis/iOsmBic2.1_alternate_haplotype,GCA_907164925.1,Osmia_bicornis_bicornis,ensembl
-Noctua_fimbriata/ilNocFimb1.1,GCA_905163415.1,Noctua_fimbriata,braker
+outdir,assembly_accession,annotation_method,geneset_version
+Asterias_rubens/eAstRub1.3,GCA_902459465.3,ensembl,2020_11
+Osmia_bicornis/iOsmBic2.1_alternate_haplotype,GCA_907164925.1,ensembl,2022_02
+Noctua_fimbriata/ilNocFimb1.1,GCA_905163415.1,braker,2022_03
 ```
 
-| Column                 | Description                                                                                                                                     |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `outdir`               | Output directory for this annotation (evaluated from `--outdir` if a relative path). Analysis results are in a sub-directory `repeats/ensembl`. |
-| `assembly_accession`   | Accession number of the assembly to download. Typically of the form `GCA_*.*`. If missing, the pipeline will infer it from the ACCESSION file.  |
-| `ensembl_species_name` | Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's                                                              |
-| `annotation_method`    | Name of the method of the geneset that holds the repeat annotation.                                                                             |
+| Column               | Description                                                                                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `outdir`             | Output directory for this annotation (evaluated from `--outdir` if a relative path). Analysis results are in a sub-directory `repeats/ensembl`. |
+| `assembly_accession` | Accession number of the assembly to download. Typically of the form `GCA_*.*`.                                                                  |
+| `annotation_method`  | Name of the method of the geneset that holds the repeat annotation.                                                                             |
+| `geneset_version`    | Version of the geneset, usually in the form `YYYY_MM`.                                                                                          |
 
 A samplesheet may contain:
 
-- multiple assemblies of the same species
-- multiple assemblies in the same output directory
-- only one row per assembly
+- multiple genesets of the same species
+- multiple genesets of the same assembly
+- multiple genesets in the same output directory
+- only one row per geneset
 
 All samplesheet columns correspond exactly to their corresponding command-line parameter,
 except `outdir` which, if a relative path, is interpreted under `--oudir`.
@@ -104,8 +101,8 @@ with:
 
 ```yaml title="params.yaml"
 assembly_accession: "GCA_905163415.1"
-ensembl_species_name: "Noctua_fimbriata"
 annotation_method: "braker"
+geneset_version: "2022_03"
 outdir: "./results/"
 ```
 

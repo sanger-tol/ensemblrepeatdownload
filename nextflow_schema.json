@@ -18,17 +18,17 @@
                     "pattern": "^GCA_[0-9]{9}\\.[0-9]+$",
                     "fa_icon": "fas fa-font"
                 },
-                "ensembl_species_name": {
-                    "type": "string",
-                    "description": "Name of the species, _as used by Ensembl_. Note: it may differ from Tree of Life's",
-                    "pattern": "^\\S+$",
-                    "fa_icon": "fas fa-italic"
-                },
                 "annotation_method": {
                     "type": "string",
                     "description": "Method used to annotate the genome. Typically `ensembl`, `braker`, etc.",
                     "pattern": "^\\S+$",
                     "fa_icon": "fas fa-book"
+                },
+                "geneset_version": {
+                    "type": "string",
+                    "description": "Version of the geneset, usually in the form `YYYY_MM`.",
+                    "pattern": "^20[0-9]{2}_[01][0-9]$",
+                    "fa_icon": "fas fa-italic"
                 },
                 "outdir": {
                     "type": "string",
@@ -44,14 +44,14 @@
                     "schema": "assets/schema_input.json",
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
-                    "description": "Path to comma-separated file containing information about the repeatsets to download. Used for bulk download across many assemblies.",
-                    "help_text": "You will need to create a file with information about the assemblies you want to download. Use this parameter to specify its location. It has to be a comma-separated file with 4 columns, and a header row.",
+                    "description": "Path to comma-separated file containing information about the genesets to download. Used for bulk download of many genesets.",
+                    "help_text": "You will need to create a file with information about the assemblies you want to download. Use this parameter to specify its location. It has to be a comma-separated file with 5 columns, and a header row.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "ftp_root": {
                     "type": "string",
                     "description": "Root location of the Ensembl FTP, in which all annotations can be found. Access protocol is actually not limited to FTP, and we use HTTPS by default.",
-                    "default": "https://ftp.ensembl.org/pub/rapid-release/species",
+                    "default": "https://ftp.ebi.ac.uk/pub/ensemblorganisms",
                     "hidden": true,
                     "fa_icon": "fas fa-link"
                 },
@@ -194,7 +194,7 @@
             "required": ["input"]
         },
         {
-            "required": ["assembly_accession", "ensembl_species_name", "annotation_method"]
+            "required": ["assembly_accession", "annotation_method", "geneset_version"]
         }
     ],
     "allOf": [

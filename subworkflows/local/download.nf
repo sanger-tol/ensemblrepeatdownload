@@ -7,35 +7,36 @@ include { ENSEMBL_GENOME_DOWNLOAD } from '../../modules/local/ensembl_genome_dow
 
 workflow DOWNLOAD {
     take:
-    repeat_params // tuple(outdir, assembly_accession, ensembl_species_name, annotation_method)
+    annotation_params // tuple(outdir, assembly_accession, annotation_method, geneset_version)
 
     main:
 
     ch_genome_fasta = ENSEMBL_GENOME_DOWNLOAD(
-        repeat_params.map { outdir, assembly_accession, ensembl_species_name, annotation_method ->
+        annotation_params.map { outdir, assembly_accession, annotation_method, geneset_version ->
             [
                 // meta
                 [
                     id: assembly_accession + ".repeats.ensembl",
+                    assembly_accession: assembly_accession,
+                    geneset_version: geneset_version,
                     method: annotation_method,
                     outdir: outdir,
                 ],
 
-                // e.g. https://ftp.ensembl.org/pub/rapid-release/species/Agriopis_aurantiaria/GCA_914767915.1/braker/genome/Agriopis_aurantiaria-GCA_914767915.1-softmasked.fa.gz
                 // ftp_path
+                // Turn "GCA_927399515.1" to "GCA/927/399/515/1"
+                // e.g. https://ftp.ebi.ac.uk/pub/ensemblorganisms/GCA/905/163/415/1/braker/2022_03/geneset/cdna.fa.bgz
                 [
                     params.ftp_root,
-                    ensembl_species_name,
-                    assembly_accession,
+                    "GCA",
+                    assembly_accession.substring(4, 7),
+                    assembly_accession.substring(7, 10),
+                    assembly_accession.substring(10, 13),
+                    assembly_accession.substring(14),
                     annotation_method,
+                    geneset_version,
                     "genome",
-                ].join("/"),
-
-                // remote_filename_stem
-                [
-                    ensembl_species_name,
-                    assembly_accession,
-                ].join("-"),
+                ].join("/")
             ]
         }
     ).fasta

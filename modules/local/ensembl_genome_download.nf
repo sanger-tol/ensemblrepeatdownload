@@ -11,7 +11,7 @@ process ENSEMBL_GENOME_DOWNLOAD {
         : 'biocontainers/gnu-wget:1.18--h7132678_6'}"
 
     input:
-    tuple val(meta), val(ftp_path), val(remote_filename_stem)
+    tuple val(meta), val(ftp_path)
 
     output:
     tuple val(meta), path("*.fa"), emit: fasta
@@ -22,18 +22,24 @@ process ENSEMBL_GENOME_DOWNLOAD {
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
-
     """
     #export https_proxy=http://wwwcache.sanger.ac.uk:3128
     #export http_proxy=http://wwwcache.sanger.ac.uk:3128
-    rm -f *.gz md5sum.txt
-    wget ${ftp_path}/${remote_filename_stem}-softmasked.fa.gz
+    rm -f *.bgz md5sum.txt
+    wget ${ftp_path}/softmasked.fa.bgz
     wget ${ftp_path}/md5sum.txt
 
-    if grep -- "-softmasked\\.fa\\.gz\$" md5sum.txt > md5checksums_restricted.txt
+    if grep -- "softmasked\\.fa\\.bgz\$" md5sum.txt > md5checksums_restricted.txt
     then
         md5sum -c md5checksums_restricted.txt
     fi
-    zcat ${remote_filename_stem}-softmasked.fa.gz > ${prefix}.fa
+    # Temporary, until the sub-workflow downstream can accept compressed files
+    zcat softmasked.fa.bgz > ${prefix}.fa
+    """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.fa
     """
 }
