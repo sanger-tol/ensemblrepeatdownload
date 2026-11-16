@@ -25,12 +25,6 @@ _In the samplesheet_
 
 > **NB:** Parameter has been **updated** if both old and new parameter information is present. </br> **NB:** Parameter has been **added** if just the new parameter information is present. </br> **NB:** Parameter has been **removed** if new parameter information isn't present.
 
-## [[2.0.2](https://github.com/sanger-tol/ensemblrepeatdownload/releases/tag/2.0.2)] - Shadowfax the Planerider (patch 2) - [2024-12-09]
-
-### Enhancements & fixes
-
-- Remove defaults from lib/Utils.groovy
-
 ## [[2.0.1](https://github.com/sanger-tol/ensemblrepeatdownload/releases/tag/2.0.1)] - Shadowfax the Planerider (patch 1) - [2024-12-05]
 
 ### Enhancements & fixes

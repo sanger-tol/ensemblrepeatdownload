@@ -54,7 +54,7 @@ sanger-tol/ensemblrepeatdownload was originally written by [Matthieu Muffato](ht
 We thank the following people for their assistance in the development of this pipeline:
 
 - [Priyanka Surana](https://github.com/priyanka-surana) for providing reviews.
-- [Tyler Chafin](https://github.com/tkchafin) for updates.
+- [Tyler Chafin](https://github.com/tkchafin) for updates and maintenance.
 
 ## Contributions and Support
 
