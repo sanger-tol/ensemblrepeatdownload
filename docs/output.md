@@ -17,10 +17,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Repeat annotation files](#repeat-annotation-files) - Files corresponding to repeat annotation produced by Ensembl
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
-All data files are compressed (and indexed) with `bgzip`.
-
-All Fasta files are indexed with `samtools faidx`, which allows accessing any region of the assembly in constant time, and `samtools dict`, which allows identifying a sequence by its MD5 checksum.
-
+All data files are compressed with `bgzip`.
+All Fasta files are indexed with `samtools faidx`, which allows accessing any region of the assembly in constant time.
 All BED files are indexed with tabix in both TBI and CSI modes, unless the sequences are too large.
 
 ### Repeat annotation files
@@ -34,11 +32,9 @@ Here are the files you can expect in the results directory.
         ├── GCA_907164925.1.masked.ensembl.bed.gz.csi
         ├── GCA_907164925.1.masked.ensembl.bed.gz.gzi
         ├── GCA_907164925.1.masked.ensembl.bed.gz.tbi
-        ├── GCA_907164925.1.masked.ensembl.fa.dict
         ├── GCA_907164925.1.masked.ensembl.fa.gz
         ├── GCA_907164925.1.masked.ensembl.fa.gz.fai
-        ├── GCA_907164925.1.masked.ensembl.fa.gz.gzi
-        └── GCA_907164925.1.masked.ensembl.fa.gz.sizes
+        └── GCA_907164925.1.masked.ensembl.fa.gz.gzi
 ```
 
 They all correspond to the repeat-masking analysis run by Ensembl themselves.
