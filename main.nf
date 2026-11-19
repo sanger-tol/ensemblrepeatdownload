@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sanger-tol/ensemblrepeatdownload
+    sanger-tol/ensembldownload
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/sanger-tol/ensemblrepeatdownload
+    Github : https://github.com/sanger-tol/ensembldownload
 ----------------------------------------------------------------------------------------
 */
 
@@ -13,9 +13,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { ENSEMBLREPEATDOWNLOAD   } from './workflows/ensemblrepeatdownload'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
+include { ENSEMBLDOWNLOAD         } from './workflows/ensembldownload'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_ensembldownload_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ensembldownload_pipeline'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
@@ -25,7 +25,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ense
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow SANGERTOL_ENSEMBLREPEATDOWNLOAD {
+workflow SANGERTOL_ENSEMBLDOWNLOAD {
     take:
     samplesheet // channel: tuple(outdir, assembly_accession, annotation_method, geneset_version)
 
@@ -34,7 +34,7 @@ workflow SANGERTOL_ENSEMBLREPEATDOWNLOAD {
     //
     // WORKFLOW: Run pipeline
     //
-    ENSEMBLREPEATDOWNLOAD (
+    ENSEMBLDOWNLOAD (
         samplesheet,
         params.outdir,
     )
@@ -64,7 +64,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    SANGERTOL_ENSEMBLREPEATDOWNLOAD(
+    SANGERTOL_ENSEMBLDOWNLOAD(
         PIPELINE_INITIALISATION.out.inputs
     )
     //

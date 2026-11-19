@@ -24,7 +24,7 @@ include { SOFT_MASKED_FASTA_REPEATS } from '../subworkflows/sanger-tol/soft_mask
 
 include { paramsSummaryMap          } from 'plugin/nf-schema'
 include { softwareVersionsToYAML    } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText    } from '../subworkflows/local/utils_nfcore_ensemblrepeatdownload_pipeline'
+include { methodsDescriptionText    } from '../subworkflows/local/utils_nfcore_ensembldownload_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +32,7 @@ include { methodsDescriptionText    } from '../subworkflows/local/utils_nfcore_e
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow ENSEMBLREPEATDOWNLOAD {
+workflow ENSEMBLDOWNLOAD {
     take:
     ch_samplesheet // channel: samplesheet read in from --input. tuple(outdir, assembly_accession, annotation_method, geneset_version)
     outdir
@@ -80,7 +80,7 @@ workflow ENSEMBLREPEATDOWNLOAD {
         .mix(topic_versions_string)
         .collectFile(
             storeDir: "${outdir}/pipeline_info",
-            name:  'ensemblrepeatdownload_software_'  + 'versions.yml',
+            name:  'ensembldownload_software_'  + 'versions.yml',
             sort: true,
             newLine: true
         )
