@@ -17,6 +17,9 @@
 
 ## Introduction
 
+> [!CAUTION]
+> This pipeline is deprecated. Please use <https://github.com/sanger-tol/ensembldownload> instead.
+
 **sanger-tol/ensemblrepeatdownload** is a pipeline that downloads repeat annotations from Ensembl into a Tree of Life directory structure.
 
 The pipeline takes a CSV file that contains assembly accession number, Ensembl species names (as they may differ from Tree of Life ones !), output directories.
